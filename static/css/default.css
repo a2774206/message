@@ -1,0 +1,21 @@
+.mint-navbar .mint-tab-item.is-selected{
+		color: #f2640e;
+	}
+	.addFriend .mint-navbar .mint-tab-item-label{
+		font-size: 15px;
+	}
+	.mint-navbar .mint-tab-item.is-selected{
+		 border-bottom: 3px solid #f2640e;
+	}
+	.font15{
+		font-size: 15px;
+	}
+	.mint-navbar{
+		margin-bottom: 15px;
+	}
+	.mint-navbar .mint-tab-item.is-selected{
+		border-bottom: 1 solid #4CAF50 !important;
+	}
+	.mint-searchbar-cancel{
+		color: #f2640e;
+	}
