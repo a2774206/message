@@ -135,8 +135,7 @@
 		text-align: center;
 		font-size:16px;
 		border: 1px solid #e1dfdf;
-		
-		color:#000 ;
+		color:#000;
 		margin: 0 auto;
 		margin-top: 20px;
 	}

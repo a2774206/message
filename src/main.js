@@ -7,18 +7,18 @@ import axios from 'axios'
 Vue.prototype.axios = axios;
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
+import store from './store'
 Vue.use(MintUI)
 Vue.config.productionTip = false
+
 //import vonic from 'vonic'
 //Vue.use(Vonic.app)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  data:{
-  	Bus:new Vue()
-  },
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

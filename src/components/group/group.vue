@@ -4,7 +4,7 @@
 			infinite-scroll-distance="10">
 			<li v-for="i in list">
 				<div class="my_tx">
-					<img src="../../../static/image/tx.png">
+					<img src="../../../static/image/tx.jpg">
 				</div>
 				<div class="describe">
 					<h3>623</h3>

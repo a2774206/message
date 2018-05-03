@@ -2,7 +2,7 @@
 	<div id="app">
 		<heading :child='router' :isShow='show'></heading>
 		<div class="clex"></div>
-		<router-view/>
+		<router-view />
 		<foot ></foot>
 	
 	</div>
@@ -20,7 +20,6 @@
 	import router from './router'
 	import heading from './components/public/head'
 	import foot from './components/public/foot'
-	
 	import login from './components/Login/Login'
 	export default {
 		name: 'App',
@@ -56,6 +55,29 @@
 		created(){
 			//去返回键
 			this.show = false;
+			
+			//console.log(this.$route.path)
+			//刷新后title传值，解决刷新后路由恢复/index
+			switch(this.$route.path){
+					case '/':
+					this.router = '/index';
+					break;
+					case '/index':
+					this.router = '/index';
+					break;
+					case '/userList':
+					this.router = '/userList'
+					break;
+					case '/group':
+					this.router = '/group'
+					break;
+					case '/my':
+					this.router = '/my'
+					break;
+					case '/addFriend':
+					this.router = '/addFriend'
+					break;
+				}
 		}
 	}
 </script>
@@ -88,7 +110,8 @@
 		border-bottom: 1px solid #969292;
 	}
 	.mint-button--default.is-plain{
-		border:1px solid #969292;
+		border:1px solid #969292;/*no*/
+		margin-bottom: 2px;
 	}
 	#Login .mint-tab-item .mint-tab-item-label{
 		font-size: 18px;
@@ -114,6 +137,9 @@
 	.more_loading{
 		background: #fff;
 		height: 30px;
-		line-height: 20px;
+		line-height: 30px;
 	}
+	
+
+
 </style>
