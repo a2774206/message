@@ -1,12 +1,12 @@
 <template>
 	<div id="Login">
 		<div class="flex_login">
+			
 			<mt-navbar v-model="selected">
 				<mt-tab-item id="1">登录</mt-tab-item>
 				<mt-tab-item id="2">注册</mt-tab-item>
-
 			</mt-navbar>
-
+			
 			<!-- tab-container -->
 			<mt-tab-container v-model="selected">
 				<mt-tab-container-item id="1">
@@ -18,8 +18,10 @@
 							<img :src="YzmSrc" @click="renovate">
 						</p>
 					</div>
-					
-					<p class="r_right"><a>忘记密码？</a></p>
+
+					<p class="r_right">
+						<a>忘记密码？</a>
+					</p>
 					<mt-button plain @click="Loginbtn">登录</mt-button>
 				</mt-tab-container-item>
 				<mt-tab-container-item id="2">
@@ -31,65 +33,93 @@
 				</mt-tab-container-item>
 
 			</mt-tab-container>
-
+			
 		</div>
+		<mt-popup v-model="popupVisible" position="top" >{{status}}</mt-popup>
 	</div>
 </template>
 
 <script>
 	import Vue from 'Vue'
-	import { Field, Button, Navbar, TabItem } from 'mint-ui';
+	import { Field, Button, Navbar, TabItem, Popup } from 'mint-ui';
 	export default {
 		name: 'Login',
 		data() {
 			return {
-				selected:'1',
-				YzmSrc:this.$store.state.ip+'/login/verifyCode?width=80&height=30',
+				selected: '1',
+				popupVisible:false,
+				status:'登陆成功',
+				YzmSrc: this.$store.state.ip + '/login/verifyCode?width=80&height=30',
 				//登陆数据
-				LoginData:{
+				LoginData: {
 					id: '',
-					username:'',
+					username: '',
 					loginmm: '',
-					phone:'',
-					yanzheng:'',
+					phone: '',
+					yanzheng: '',
 				},
-				RegisterData:{
+				RegisterData: {
 					//注册数据
 				}
 			}
 		},
-		components: {
-			
-		},
-		methods:{
-			Loginbtn(){
-				//login参数集合
-				let parameter = {
-					name:this.LoginData.id,
-					password:this.LoginData.password,
-					verifyCode:this.LoginData.yanzheng
+		methods: {
+			Loginbtn() {
+				if(this.LoginData.username!=''||this.LoginData.loginmm!=''||this.LoginData.yanzheng!=''){
+					//md5加密
+					let md5word = hex_md5(this.LoginData.password);
+					//哈希加密
+					var hashword = hex_sha1(md5word);
+					//AES加密
+					let aes = Encrypt(hashword);
+					//login参数集合
+					let parameter = {
+						name: this.LoginData.id,
+						password: aes,
+						verifyCode: this.LoginData.yanzheng
+					}
+					//登陆后台提交
+					let PostUrl = this.$store.state.ip + '/login/commit';
+					this.axios({
+						method: 'post',
+						url: PostUrl,
+						data: parameter
+					}).then(res => {
+						console.log(res);
+						this.status = res.data.message;
+						this.popupVisible = true;
+						this.$store.state.LoginStatus = true;
+						setTimeout(()=>{
+							this.popupVisible = false;
+						},3000);
+						if(res.data.status=='success'){
+							this.status = '登录成功！';
+							setTimeout(()=>{
+								this.$router.push('/')
+							},2000);
+						}
+					});	
+				}else{
+					this.status = '不能为空'
+					this.popupVisible = true;
+					setTimeout(()=>{
+							this.popupVisible = false;
+					},3000);
 				}
-				//登陆后台提交
-				let PostUrl = this.$store.state.ip + '/login/commit';
-				this.axios({
-					method:'post',
-					url:PostUrl,
-					data:parameter
-				}).then(res=>{
-				    console.log(res.data);
-				});
+				//验证码刷新
+				this.renovate();
 			},
-			renovate(){
+			renovate() {
 				//验证码刷新
 				let yzm = this.YzmSrc;
-				this.YzmSrc =this.$store.state.ip+'/login/verifyCode?width=80&height=30&'+ Math.random();
+				this.YzmSrc = this.$store.state.ip + '/login/verifyCode?width=80&height=30&' + Math.random();
 			}
+
+		},
+		created() {
 			
 		},
-		created(){
-			//this.getJson();
-		},
-		computed:{
+		computed: {
 			
 		}
 	}
@@ -121,19 +151,21 @@
 		background: #fff;
 		overflow: hidden;
 	}
-	.r_right{
+	
+	.r_right {
 		text-align: right;
 	}
-	#Login{
+	
+	#Login {
 		background: #fff;
 		width: 375px;
 		overflow: hidden;
 		height: 700px;
 		position: relative;
 		z-index: 9999;
-		margin-top:-44px;
-		
+		margin-top: -44px;
 	}
+	
 	.flex_login {
 		padding: 0 20px;
 		position: absolute;
@@ -142,10 +174,12 @@
 		z-index: 999;
 		width: 335px;
 	}
-	.v{
+	
+	.v {
 		position: relative;
 	}
-	.yzm_img{
+	
+	.yzm_img {
 		width: 80px;
 		height: 30px;
 		right: 0;
@@ -153,4 +187,5 @@
 		bottom: 10px;
 		z-index: 99;
 	}
+	
 </style>

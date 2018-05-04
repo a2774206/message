@@ -35,6 +35,8 @@
 		},
 		watch: {
 			'$route' (to, from) {
+				//登陆路由判断
+				this.isLogin();
 				//监听路由发生变化，然后传值到head组件
 				//也可以在head中监听，这里可以简化，不用父子传值
 				//console.log(to.query)
@@ -50,9 +52,17 @@
 		methods:{
 			friend(){
 		          Friend.$emit('newFriend', 2)
+		     },
+		     isLogin(){
+		     	if(!this.$store.state.LoginStatus){
+					this.$router.push('/login');
+					
+				}
 		     }
 		},
 		created(){
+			//是否登录
+			this.isLogin()
 			//去返回键
 			this.show = false;
 			
@@ -139,7 +149,17 @@
 		height: 30px;
 		line-height: 30px;
 	}
-	
-
-
+	#Login .v-modal{
+		height: 40px;
+		line-height: 2px;
+		
+	}
+	#Login .mint-popup{
+		background: none;
+		color: #fff;
+		font-size: 14px;
+	}
+	#Login .mint-popup-top{
+		top: 10px;
+	}
 </style>

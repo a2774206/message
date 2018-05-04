@@ -1,7 +1,7 @@
 <template>
 	<ul class="index_list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" 
 			infinite-scroll-distance="6">
-		<li @click="urlLogin"  v-for="i in list">
+		<li v-for="i in list">
 			<div class="my_tx">
 				<img src="../../../static/image/tx.png">
 			</div>
@@ -32,9 +32,6 @@
 			}
 		},
 		methods:{
-			urlLogin(){
-				window.location.href='#/login'
-			},
 			loadMore() {
 		
 			  this.loading = true;
