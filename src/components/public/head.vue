@@ -2,7 +2,7 @@
 	<div class="heading">
 		<i class="mintui mintui-back" @click="back" v-show="isShows"></i>
 		<span>{{childs}}</span>
-		
+		<center class="nickname" v-show='this.$store.state.nickname'>name</center>
 		<router-link :to="{path:'/addFriend',query:{tab:4}}"><div class="btn-add">
 			<img src="../../../static/image/add.png">
 		</div></router-link>
@@ -15,7 +15,7 @@
 		name: 'heading',
 		data() {
 			return {
-				msg: true
+				
 			}
 		},
 		props:['child','isShow'],//当用户返回的时候，父组件路由变化的时，传递路由改变当前tab选项
@@ -65,19 +65,8 @@
 			
 		},
 		created(){
-			
-		},
-		watch:{
-//			'$route'(to, from) {
-//				//根据跳转的路由判断是否显示返回按钮（是不是index）
-////				console.log(to.query.tab); !to.query.tab===0
-//				if(!to.query.tab||to.query.tab=='undefined'){
-//					this.msg = false;
-//				}else{
-//					this.msg = true;
-//				}
-//			}
-			
+				this.$store.state.nickname = true;
+			//console.log(this.$tore.state.nickname)
 		}
 	}
 </script>
@@ -141,6 +130,13 @@
 		font-size: 18px;
 		top: 0;
 		
+	}
+	.nickname{
+		width: 200px;
+		margin:  0 auto;
+		overflow: hidden;
+		white-space: nowrap;
+   		text-overflow: ellipsis;
 	}
 	
 </style>

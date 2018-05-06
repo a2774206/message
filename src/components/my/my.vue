@@ -14,22 +14,41 @@
 				</div>
 			</div>
 		</ul>
-		<div class="exit">退出</div>
+		<div class="exit" @click="exit">退出</div>
+		<mt-actionsheet
+  :actions="actions"
+  v-model="sheetVisible">
+</mt-actionsheet>
 	</div>
 </template>
 
 <script>
 	import Vue from 'Vue'
+	import { Actionsheet,Toast } from 'mint-ui';
 	export default {
 		name: 'My',
 		data() {
 			return {
 				msg: '建设中...',
-				
+				sheetVisible:false,
+				actions:[
+					{
+						name:'退出账号',method:()=>{
+						Toast('已退出');
+						this.$store.state.LoginStatus = false;
+							setTimeout(()=>{
+								this.$router.push('/login')
+							},1220)
+						
+						}
+					}
+				]
 			}
 		},
 		methods: {
-			
+			exit(){
+				this.sheetVisible = true;	
+			}
 		},
 		components: {
 
@@ -129,7 +148,7 @@
 		width: 20px;height: 20px;
 	}
 	.exit{
-		width:370px;
+		width:360px;
 		height: 35px;
 		line-height: 35px;
 		text-align: center;

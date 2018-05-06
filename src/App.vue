@@ -46,7 +46,12 @@
 					this.show = true;
 				}
 				this.router = to.path;
-				
+				if(to.path == '/online'){
+					this.$store.state.nickname = true;
+					
+				}else{
+					this.$store.state.nickname = false;
+				}
 			}
 		},
 		methods:{
@@ -61,6 +66,7 @@
 		     }
 		},
 		created(){
+			
 			//是否登录
 			this.isLogin()
 			//去返回键
@@ -68,26 +74,27 @@
 			
 			//console.log(this.$route.path)
 			//刷新后title传值，解决刷新后路由恢复/index
-			switch(this.$route.path){
-					case '/':
-					this.router = '/index';
-					break;
-					case '/index':
-					this.router = '/index';
-					break;
-					case '/userList':
-					this.router = '/userList'
-					break;
-					case '/group':
-					this.router = '/group'
-					break;
-					case '/my':
-					this.router = '/my'
-					break;
-					case '/addFriend':
-					this.router = '/addFriend'
-					break;
-				}
+//			switch(this.$route.path){
+//					case '/':
+//					this.router = '/index';
+//					break;
+//					case '/index':
+//					this.router = '/index';
+//					break;
+//					case '/userList':
+//					this.router = '/userList'
+//					break;
+//					case '/group':
+//					this.router = '/group'
+//					break;
+//					case '/my':
+//					this.router = '/my'
+//					break;
+//					case '/addFriend':
+//					this.router = '/addFriend'
+//					break;
+//				}
+			this.router = this.$route.path;
 		}
 	}
 </script>
@@ -149,17 +156,28 @@
 		height: 30px;
 		line-height: 30px;
 	}
-	#Login .v-modal{
+	#Login .v-modal,.addFriend .v-modal{
 		height: 40px;
 		line-height: 2px;
 		
 	}
-	#Login .mint-popup{
+	#Login .mint-popup,.addFriend .mint-popup{
 		background: none;
 		color: #fff;
 		font-size: 14px;
 	}
-	#Login .mint-popup-top{
+	#Login .mint-popup-top,.addFriend .mint-popup-top{
 		top: 10px;
+	}
+	.email_y{
+		position: relative;
+	}
+	#login .send{
+		
+		position: absolute !important;
+		right: 0 !important;
+	}
+	.wait_ico{
+		margin-top: 20px;
 	}
 </style>

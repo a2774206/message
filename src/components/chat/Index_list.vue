@@ -1,7 +1,7 @@
 <template>
 	<ul class="index_list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" 
 			infinite-scroll-distance="6">
-		<li v-for="i in list">
+		<router-link v-for="(i,key) in list" to='/online'  tag='li' :key='key'>
 			<div class="my_tx">
 				<img src="../../../static/image/tx.png">
 			</div>
@@ -10,7 +10,7 @@
 				<p>春蕾计划，帮助老弱病残，欢迎您加入慈善事业..</p>
 			</div>
 			<div class="time">2017-08-01 10:20</div>
-		</li>
+		</router-link>
 		 <center class="more_loading" v-show="true">
 	  		<mt-spinner type="triple-bounce" color="#00ccff" :size="20" v-show="true"></mt-spinner>
 	  		<span v-show="allLoaded()">扯到底了</span>

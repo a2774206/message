@@ -6,6 +6,7 @@ import userList from '@/components/userList/userList'
 import group from '@/components/group/group'
 import my from '@/components/my/my'
 import addFriend from '@/components/addFriend/addFriend'
+import online from '@/components/chat/online'
 Vue.use(Router)
 
 export default new Router({
@@ -28,7 +29,7 @@ routes: [
     {
       path: '/userList',
       name: 'userList',
-      component: userList
+      component: userList,
     },
     {
       path: '/group',
@@ -44,6 +45,10 @@ routes: [
       path: '/addFriend',
       name: 'addFriend',
       component: addFriend
-    }
+    },{
+	    path:'/online',
+	    name: 'online',
+	    component:online
+	 }
 ]
 })

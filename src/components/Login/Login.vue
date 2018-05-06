@@ -25,11 +25,16 @@
 					<mt-button plain @click="Loginbtn">登录</mt-button>
 				</mt-tab-container-item>
 				<mt-tab-container-item id="2">
-					<mt-field label="" placeholder="请输入用户名" v-model="LoginData.username"></mt-field>
-					<mt-field label="" placeholder="请输入邮箱" type="email" v-model="LoginData.email"></mt-field>
-					<mt-field label="" placeholder="请输入密码" type="password" v-model="LoginData.loginmm"></mt-field>
-					<mt-field label="" placeholder="请输入手机号" type="tel" v-model="LoginData.phone"></mt-field>
-					<mt-button plain>注册</mt-button>
+					<mt-field label="" placeholder="请输入昵称" v-model="RegisterData.nickName"></mt-field>
+					<mt-field label="" placeholder="请输入邮箱" type="email" v-model="RegisterData.email"></mt-field>
+					<div class="email_y">
+						<mt-field label="" placeholder="请输入邮箱校验码" type="email" v-model="RegisterData.yanzheng"></mt-field>
+						<mt-button type="primary" :disabled='RegisterStatus' size="small" class='send' style="position: absolute;z-index: 99;right: 15px;top:7.5px;" @click='RegisterSend'>
+							{{RegisterSendBtn}}
+						</mt-button>
+					</div>
+					<mt-field label="" placeholder="请输入密码" type="password" v-model="RegisterData.registermm"></mt-field>
+					<mt-button plain v-on:click='RegisterBtn'>注册</mt-button>
 				</mt-tab-container-item>
 
 			</mt-tab-container>
@@ -49,7 +54,9 @@
 				selected: '1',
 				popupVisible:false,
 				status:'登陆成功',
-				YzmSrc: this.$store.state.ip + '/login/verifyCode?width=80&height=30',
+				RegisterSendBtn:'发送',
+				RegisterStatus:false,
+				YzmSrc: this.$store.state.ip + '/api/login/verifyCode?width=80&height=30',
 				//登陆数据
 				LoginData: {
 					id: '',
@@ -60,6 +67,11 @@
 				},
 				RegisterData: {
 					//注册数据
+					nickName:'',
+					email:'',
+					registermm:'',
+					yanzheng:''
+					
 				}
 			}
 		},
@@ -79,42 +91,111 @@
 						verifyCode: this.LoginData.yanzheng
 					}
 					//登陆后台提交
-					let PostUrl = this.$store.state.ip + '/login/commit';
+					let PostUrl = this.$store.state.ip + '/api/login/commit';
 					this.axios({
 						method: 'post',
 						url: PostUrl,
 						data: parameter
 					}).then(res => {
-						console.log(res);
-						this.status = res.data.message;
-						this.popupVisible = true;
+						this.ModalStatus(res.data.message);
 						this.$store.state.LoginStatus = true;
-						setTimeout(()=>{
-							this.popupVisible = false;
-						},3000);
 						if(res.data.status=='success'){
-							this.status = '登录成功！';
+							this.status = '登录成功';
 							setTimeout(()=>{
 								this.$router.push('/')
 							},2000);
+						}else{
+							//登录失败刷验证
+							this.renovate();
+							this.LoginData.yanzheng = '';
 						}
 					});	
 				}else{
-					this.status = '不能为空'
-					this.popupVisible = true;
-					setTimeout(()=>{
-							this.popupVisible = false;
-					},3000);
+					this.ModalStatus('不能为空')
 				}
-				//验证码刷新
-				this.renovate();
+				
+			},
+			ModalStatus(info,timer){
+				//信息提示，info:提示内容，timer:显示时间
+				if(timer ==''||timer == undefined){
+					timer = 3000
+				}
+				this.status = info;
+				this.popupVisible = true;
+				setTimeout(()=>{
+					this.popupVisible = false;
+				},timer);
+			},
+			RegisterBtn(){
+				//注册
+				
 			},
 			renovate() {
-				//验证码刷新
+				//login验证码刷新
 				let yzm = this.YzmSrc;
-				this.YzmSrc = this.$store.state.ip + '/login/verifyCode?width=80&height=30&' + Math.random();
+				this.YzmSrc = this.$store.state.ip + '/api/login/verifyCode?width=80&height=30&' + Math.random();
+			},
+			RegisterSend(){
+				//注册邮箱发送验证码
+				let reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+				if(this.RegisterData.email != '' && reg.test(this.RegisterData.email)){
+					this.axios({
+						method: 'post',
+						url: this.$store.state.ip +'/api/register/email',
+						data: {'email':this.RegisterData.email}
+					}).then(res => {
+						if(res.data.status=='success'){
+							this.RegisterStatus = true;
+							this.ModalStatus('发送成功');
+							let WaitTime = 20;
+							var start = setInterval(()=>{
+								this.RegisterSendBtn = WaitTime--;
+								if(!this.RegisterSendBtn){
+									clearInterval(start);
+									this.RegisterSendBtn = '发送'
+									this.RegisterStatus = false;
+								}
+							},1000)
+						}else if(res.data.status=='error'){
+							thi.ModalStatus(res.data.message);
+						}
+					});	
+				}else{
+					this.ModalStatus('请正确填写邮箱!');
+				}
+				
+			},
+			RegisterBtn(){
+				//注册密码三层加密
+				//md5加密
+				let md5 = hex_md5(this.RegisterData.registermm);
+				//哈希加密
+				let sha = hex_sha1(md5);
+				//AES加密
+				let aes = Encrypt(aes);
+				//注册参数集合
+				let _register = {
+					 "email": this.RegisterData.email,
+					  "nickName": this.RegisterData.nickName,
+					  "password": this.RegisterData.registermm,
+					  "verifyCode": this.RegisterData.yanzheng
+				}
+				this.axios({
+						method: 'post',
+						url: this.$store.state.ip+'/api/register/commit',
+						data: _register
+				}).then(res => {
+					this.ModalStatus(res.data.message);
+					this.$store.state.LoginStatus = true;
+					if(res.data.status=='success'){
+						this.status = '注册成功';
+						setTimeout(()=>{
+							this.$router.push('/')
+						},2000);
+					}
+				});	
+				
 			}
-
 		},
 		created() {
 			
@@ -187,5 +268,6 @@
 		bottom: 10px;
 		z-index: 99;
 	}
+	
 	
 </style>

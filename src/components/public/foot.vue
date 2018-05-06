@@ -78,7 +78,7 @@
 					this.footShow = true;
 				}
 				//如果非底部四个tab是路由则隐藏
-				else if(str==4||str==5||str==6){
+				else if(str==4||str==5||str==6||to.path=='/online'){
 					this.footShow = false;
 				}
 				else if(to.path=='/'){
