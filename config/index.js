@@ -11,7 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-    	 '/api': {       //这里是我配置的名字  
+    	 '/': {       //这里是我配置的名字  
             target: 'http://39.104.169.117', //这个路径是我代理到本地的php服务器  
             changeOrigin: true, //开启代理  
             pathRewrite: {'^/': '/'}  //这里重写路径运行后就代理到对应地址  

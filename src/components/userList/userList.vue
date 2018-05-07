@@ -64,6 +64,22 @@
 			return {
 				msg: 'UserList'
 			}
+		},
+		methods:{
+			LoadFrindList(){
+				
+				this.axios({
+						method: 'post',
+						url: this.$store.state.ip+'/api/friend/list',
+				}).then(res => {
+					if(res.data.status=="success"){
+						
+					}
+				});	
+			}
+		},
+		created(){
+			this.LoadFrindList()
 		}
 	}
 </script>

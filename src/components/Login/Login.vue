@@ -47,6 +47,10 @@
 <script>
 	import Vue from 'Vue'
 	import { Field, Button, Navbar, TabItem, Popup } from 'mint-ui';
+//	import VueSocketio from 'vue-socket.io';
+//	import socketio from 'socket.io-client';
+//	Vue.use(VueSocketio, socketio('http://127.0.0.1:8080/gs-guide-websocket'));
+	
 	export default {
 		name: 'Login',
 		data() {

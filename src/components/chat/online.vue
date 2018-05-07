@@ -4,7 +4,7 @@
 			<div class="online-for">
 				<div class="online-info">
 					<div class="online-tx">
-						<img src="../../../dist/static/image/tx.png">
+						<img src="../../../static/image/tx.png">
 					</div>
 					<div class="online-name">
 						且行且珍惜
@@ -29,7 +29,7 @@
 			<div class="online-for online-f">
 				<div class="online-info">
 					<div class="online-tx">
-						<img src="../../../dist/static/image/tx.png">
+						<img src="../../../static/image/tx.png">
 					</div>
 					<div class="online-name">
 						且行且珍惜
@@ -54,7 +54,7 @@
 			<div class="online-for">
 				<div class="online-info">
 					<div class="online-tx">
-						<img src="../../../dist/static/image/tx.png">
+						<img src="../../../static/image/tx.png">
 					</div>
 					<div class="online-name">
 						且行且珍惜
@@ -79,7 +79,7 @@
 			<div class="online-for">
 				<div class="online-info">
 					<div class="online-tx">
-						<img src="../../../dist/static/image/tx.png">
+						<img src="../../../static/image/tx.png">
 					</div>
 					<div class="online-name">
 						且行且珍惜
@@ -106,7 +106,7 @@
 				<input type="text">
 			</div>
 			<div>
-				<button class="mint-button mint-button--default mint-button--normal is-plain fasong">发送</button>
+				<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click='stomp'>发送</button>
 			</div>
 		</div>
 	</div>
@@ -114,7 +114,8 @@
 
 <script>
 	import Vue from 'Vue';
-
+//	import SockJS from 'sockjs-client';
+//	import Stomp from 'stomp-websocket';
 	export default {
 		name: 'online',
 		data() {
@@ -123,27 +124,40 @@
 			}
 		},
 		methods: {
+			stomp() {
+				var stompClient = null;
+				var socket = new SockJS('/gs-guide-websocket');
+				stompClient = Stomp.over(socket);
 
+				stompClient.connect({}, function(frame) {
+					console.log('Connected: ' + frame);
+					//订阅消息发送后的通知
+					stompClient.subscribe('/user/topic/message/handle/notify', function(data) {
+						console.log("接收到通知：" + data.body);
+					});
+
+					stompClient.send("/app/websocket/connect/notify", {}, JSON.stringify({}));
+
+				});
+			}
 		},
-		created() {
-			//			alert()
+		deactivated() {
+
 		}
 	}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-	.online {
-		
-	}
-	.online-all{
+	.online {}
+	
+	.online-all {
 		padding: 15px 12px;
-		
 	}
+	
 	.online-for {
 		margin: 25px 0;
 		clear: both;
-		
 	}
 	
 	.online-tx {
@@ -153,7 +167,8 @@
 		float: left;
 		margin-right: 15px;
 	}
-	.fasong{
+	
+	.fasong {
 		width: 80px;
 		margin: 0;
 		height: 36px;
@@ -161,6 +176,7 @@
 		float: right;
 		font-size: 16px;
 	}
+	
 	.online-tx img {
 		width: 100%;
 		height: 100%;
@@ -248,7 +264,8 @@
 	.online-f .online-name {
 		float: right;
 	}
-	.online-bottom{
+	
+	.online-bottom {
 		width: 100%;
 		height: 44px;
 		border-top: 1px solid #c9c9ca;
@@ -256,22 +273,24 @@
 		bottom: 0px;
 		background: #f5f5f5;
 	}
-	.online-input{
+	
+	.online-input {
 		width: 295px;
 		float: left;
 		height: 30px;
-		margin-top:9px;
+		margin-top: 9px;
 	}
-	.online-input input{
+	
+	.online-input input {
 		height: 100%;
 		padding: 0 5px;
 		width: 98%;
 		border: 0;
-		border-bottom:1px solid #ccc ;
+		border-bottom: 1px solid #ccc;
 		outline: none;
 	}
-	.online-input input:focus{
+	
+	.online-input input:focus {
 		border-bottom-color: #65f747;
-		
 	}
 </style>
