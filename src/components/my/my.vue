@@ -14,17 +14,17 @@
 				</div>
 			</div>
 		</ul>
-		<div class="exit" @click="exit">退出</div>
-		<mt-actionsheet
-  :actions="actions"
-  v-model="sheetVisible">
-</mt-actionsheet>
+		<ul class="tools">
+			<li @click="clearLocal">清除聊天记录</li>
+			<li class="exit" @click="exit">退出</li>
+		</ul>
+		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
 	</div>
 </template>
 
 <script>
 	import Vue from 'Vue'
-	import { Actionsheet,Toast } from 'mint-ui';
+	import { Actionsheet,Toast ,MessageBox } from 'mint-ui';
 	export default {
 		name: 'My',
 		data() {
@@ -48,7 +48,19 @@
 		methods: {
 			exit(){
 				this.sheetVisible = true;	
+			},
+			clearLocal(){
+				MessageBox({
+				  title: '提示',
+				  message: '确定执行此操作?',
+				  showCancelButton: true
+				});
+				MessageBox.confirm('确定执行此操作?').then(action => {
+				  Toast('清除成功');
+				  localStorage.clear();
+				});
 			}
+			
 		},
 		components: {
 
@@ -106,12 +118,9 @@
 	}
 	
 	.describe h3 {
-		font-size: 17px;
-		/*no*/
-		margin-bottom: 5px;
-		/*no*/
-		margin-top: -1px;
-		/*no*/
+		font-size: 15px;/*no*/
+		margin-bottom: 5px;/*no*/
+		margin-top: -1px;/*no*/
 		font-weight: 500;
 		overflow: hidden;
 	}
@@ -125,7 +134,9 @@
 		color: #999898;
 		font-size: 14px;
 	}
-	
+	#my{
+		background: #e8e8e8;
+	}
 	.describe,
 	.my_tx {
 		float: left;
@@ -153,9 +164,26 @@
 		line-height: 35px;
 		text-align: center;
 		font-size:16px;
-		border: 1px solid #e1dfdf;
+		border-bottom: 1px solid #e5e5e5;
 		color:#000;
 		margin: 0 auto;
 		margin-top: 20px;
+		background: #fff;
+	}
+	.tools {
+		padding: 0;
+		margin: 0;
+	}
+	.tools li{
+		width: 100%;
+		height: 40px;
+		line-height:40px;
+		text-align: center;
+		padding: 0;
+		margin: 0;
+		margin-top:4px; /*no*/
+		display: block;
+		background:#fff;
+		font-size: 14px;
 	}
 </style>

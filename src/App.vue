@@ -180,4 +180,13 @@
 	.wait_ico{
 		margin-top: 20px;
 	}
+	#my .mint-actionsheet-listitem, .mint-actionsheet-button{
+		font-size: 16px;
+	}
+	.userList .mint-indexlist-content{
+		height: 550px !important;
+	}
+	.userList .mint-indexlist-navitem{
+		padding: 2px 5px;
+	}
 </style>

@@ -80,11 +80,8 @@
 			    	 }));
 			    	  this.msg = '';
 			     	//this.$refs.ref_a[0].click();
-				    this.$nextTick(function(){
-				     var e = document.getElementsByClassName('online-all')[0];
-				    	 setTimeout(function(){
-				    		 e.scrollTop=e.scrollHeight;
-				    	 },80)
+				    this.$nextTick(()=>{
+				     this.toBottom()
 				    })
 				 }
 			},
@@ -97,6 +94,12 @@
 				}else{
 					localStorage.setItem(this.uid,JSON.stringify(this.message))
 				}
+			},
+			toBottom(){
+				var e = document.getElementsByClassName('online-all')[0];
+				 setTimeout(function(){
+				     e.scrollTop=e.scrollHeight;
+				 },80)
 			}
 		},
 		mounted(){
@@ -112,7 +115,9 @@
 			}
 		},
 		created(){
-			
+			this.$nextTick(()=>{
+				     this.toBottom()
+			})
 			this.uid = this.$route.query.uid;
 			this.$store.state.nick = this.uid;
 			//该好友是否有历史聊天
