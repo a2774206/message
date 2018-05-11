@@ -22,7 +22,7 @@
 					<p class="r_right">
 						<a>忘记密码？</a>
 					</p>
-					<mt-button plain @click="Loginbtn">登录</mt-button>
+					<mt-button plain @click.native="Loginbtn" @keyup.native.enter="Loginbtn">登录</mt-button>
 				</mt-tab-container-item>
 				<mt-tab-container-item id="2">
 					<mt-field label="" placeholder="请输入昵称" v-model="RegisterData.nickName"></mt-field>
@@ -63,9 +63,10 @@
 				YzmSrc: this.$store.state.ip + '/api/login/verifyCode?width=80&height=30',
 				//登陆数据
 				LoginData: {
-					id: '',
+					id: '10002',
 					username: '',
 					loginmm: '',
+					password:'asd123456789',
 					phone: '',
 					yanzheng: '',
 				},
@@ -81,8 +82,8 @@
 		},
 		methods: {
 			Loginbtn() {
-				if(this.LoginData.username!=''||this.LoginData.loginmm!=''||this.LoginData.yanzheng!=''){
-					//md5加密
+				if(this.LoginData.id!=''||this.LoginData.loginmm!=''){
+					//md5加密||this.LoginData.yanzheng!=''
 					let md5word = hex_md5(this.LoginData.password);
 					//哈希加密
 					var hashword = hex_sha1(md5word);
@@ -91,15 +92,17 @@
 					//login参数集合
 					let parameter = {
 						name: this.LoginData.id,
-						password: aes,
-						verifyCode: this.LoginData.yanzheng
+						password: aes
+//						,
+//						verifyCode: this.LoginData.yanzheng
 					}
 					//登陆后台提交
 					let PostUrl = this.$store.state.ip + '/api/login/commit';
 					this.axios({
 						method: 'post',
 						url: PostUrl,
-						data: parameter
+						data: parameter,
+						withCredentials:true
 					}).then(res => {
 						this.ModalStatus(res.data.message);
 						this.$store.state.LoginStatus = true;
@@ -112,9 +115,11 @@
 							//登录失败刷验证
 							this.renovate();
 							this.LoginData.yanzheng = '';
+							console.log(res.data)
 						}
 					});	
 				}else{
+					
 					this.ModalStatus('不能为空')
 				}
 				
@@ -146,7 +151,8 @@
 					this.axios({
 						method: 'post',
 						url: this.$store.state.ip +'/api/register/email',
-						data: {'email':this.RegisterData.email}
+						data: {'email':this.RegisterData.email},
+						withCredentials:true
 					}).then(res => {
 						if(res.data.status=='success'){
 							this.RegisterStatus = true;
@@ -178,16 +184,18 @@
 				//AES加密
 				let aes = Encrypt(aes);
 				//注册参数集合
+				console.log(aes)
 				let _register = {
 					 "email": this.RegisterData.email,
 					  "nickName": this.RegisterData.nickName,
-					  "password": this.RegisterData.registermm,
+					  "password": aes,
 					  "verifyCode": this.RegisterData.yanzheng
 				}
 				this.axios({
 						method: 'post',
 						url: this.$store.state.ip+'/api/register/commit',
-						data: _register
+						data: _register,
+						withCredentials:true
 				}).then(res => {
 					this.ModalStatus(res.data.message);
 					this.$store.state.LoginStatus = true;
@@ -266,10 +274,9 @@
 	
 	.yzm_img {
 		width: 80px;
-		height: 30px;
 		right: 0;
 		position: absolute;
-		bottom: 10px;
+		bottom: 9px;
 		z-index: 99;
 	}
 	

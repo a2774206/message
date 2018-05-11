@@ -2,9 +2,8 @@
 	<div class="userList">
 		<mt-index-list>
 			<mt-index-section index="A">
-				<mt-cell title="Aaron"></mt-cell>
-				<mt-cell title="Alden"></mt-cell>
-				<mt-cell title="Austin"></mt-cell>
+				<mt-cell :title="A.code" v-for ="(A,i) in friendA" :key="i" v-on:click.native="$router.push({path:'/online',query:{uid:A.code}})"></mt-cell>
+				
 			</mt-index-section>
 			<mt-index-section index="B">
 				<mt-cell title="Baldwin"></mt-cell>
@@ -62,7 +61,8 @@
 		name: 'userList',
 		data() {
 			return {
-				msg: 'UserList'
+				msg: 'UserList',
+				friendA:[]
 			}
 		},
 		methods:{
@@ -71,11 +71,17 @@
 				this.axios({
 						method: 'post',
 						url: this.$store.state.ip+'/api/friend/list',
+						withCredentials:true
 				}).then(res => {
+					console.log(res.data.data)
 					if(res.data.status=="success"){
-						
+						this.friendA = res.data.data;
+						console.log(this.friendA)
 					}
 				});	
+			},
+			ListA(){
+				//alert()
 			}
 		},
 		created(){

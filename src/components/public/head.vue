@@ -2,7 +2,7 @@
 	<div class="heading">
 		<i class="mintui mintui-back" @click="back" v-show="isShows"></i>
 		<span>{{childs}}</span>
-		<center class="nickname" v-show='this.$store.state.nickname'>name</center>
+		<center class="nickname" v-show='this.$store.state.nickname'>{{nick}}</center>
 		<router-link :to="{path:'/addFriend',query:{tab:4}}"><div class="btn-add">
 			<img src="../../../static/image/add.png">
 		</div></router-link>
@@ -31,6 +31,9 @@
 				 	this.msg =true;
 				 }
 				return this.msg
+			},
+			nick(){
+				return this.$store.state.nick;
 			}
 		},
 		methods: {

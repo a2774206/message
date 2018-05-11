@@ -1,97 +1,24 @@
 <template>
 	<div class="online">
 		<div class="online-all">
-			<div class="online-for">
+			<div class="online-for" v-for="(item,i) in message" :key='i' :class="{'online-f':whoName==item.receiver}">
 				<div class="online-info">
 					<div class="online-tx">
 						<img src="../../../static/image/tx.png">
 					</div>
 					<div class="online-name">
-						且行且珍惜
+						<!--<span v-if="item.receiver==whoName">{{item.receiver}}</span>
+						<span v-if="item.receiver!=10002">{{item.sender}}</span>-->
+						{{item.sender}}
 					</div>
 					<div class="online-time">
-						2018/5/5 3:55
+						{{item.createTime|filterTime}}
 					</div>
 				</div>
 				<div class="online-content">
 					<div class="online-k">
 						<div class="send">
-							你好，我是来自山西的且行且珍惜，请大家多多关照！
-							<div class="arrow">
-
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="online-for online-f">
-				<div class="online-info">
-					<div class="online-tx">
-						<img src="../../../static/image/tx.png">
-					</div>
-					<div class="online-name">
-						且行且珍惜
-					</div>
-					<div class="online-time">
-						2018/5/5 3:55
-					</div>
-				</div>
-				<div class="online-content">
-					<div class="online-k">
-						<div class="send">
-							你好，我是来自山西的且行且珍惜，请大家多多关照！
-							<div class="arrow">
-
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="online-for">
-				<div class="online-info">
-					<div class="online-tx">
-						<img src="../../../static/image/tx.png">
-					</div>
-					<div class="online-name">
-						且行且珍惜
-					</div>
-					<div class="online-time">
-						2018/5/5 3:55
-					</div>
-				</div>
-				<div class="online-content">
-					<div class="online-k">
-						<div class="send">
-							你好，我是来自山西的且行且珍惜，请大家多多关照！
-							<div class="arrow">
-
-							</div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-
-			<div class="online-for">
-				<div class="online-info">
-					<div class="online-tx">
-						<img src="../../../static/image/tx.png">
-					</div>
-					<div class="online-name">
-						且行且珍惜
-					</div>
-					<div class="online-time">
-						2018/5/5 3:55
-					</div>
-				</div>
-				<div class="online-content">
-					<div class="online-k">
-						<div class="send">
-							你好，我是来自山西的且行且珍惜，请大家多多关照！
+							{{item.content}}
 							<div class="arrow">
 
 							</div>
@@ -103,10 +30,10 @@
 		</div>
 		<div class="online-bottom">
 			<div class="online-input">
-				<input type="text">
+				<input type="text" v-model="msg">
 			</div>
 			<div>
-				<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click='stomp'>发送</button>
+				<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click="sendMessage">发送</button>
 			</div>
 		</div>
 	</div>
@@ -114,35 +41,86 @@
 
 <script>
 	import Vue from 'Vue';
-//	import SockJS from 'sockjs-client';
-//	import Stomp from 'stomp-websocket';
+	import SockJS from 'sockjs-client';
+	import Stomp from 'stomp-websocket';
 	export default {
 		name: 'online',
 		data() {
 			return {
-
+				msg:'',
+				stompClient:'',
+				message:[],
+				uid:''
 			}
 		},
 		methods: {
 			stomp() {
-				var stompClient = null;
+				
 				var socket = new SockJS('/gs-guide-websocket');
-				stompClient = Stomp.over(socket);
+				this.stompClient = Stomp.over(socket);
 
-				stompClient.connect({}, function(frame) {
-					console.log('Connected: ' + frame);
+				this.stompClient.connect({}, frame => {
+					//console.log('Connected: ' + frame);
 					//订阅消息发送后的通知
-					stompClient.subscribe('/user/topic/message/handle/notify', function(data) {
-						console.log("接收到通知：" + data.body);
+					//console.log(this.stompClient)
+					this.stompClient.subscribe('/user/topic/message/handle/notify', data => {
+						console.log((JSON.parse(data.body)).data)
+						this.message.push((JSON.parse(data.body)).data)
 					});
 
-					stompClient.send("/app/websocket/connect/notify", {}, JSON.stringify({}));
+					this.stompClient.send("/app/websocket/connect/notify", {}, JSON.stringify({}));
 
 				});
+			},
+			sendMessage(){
+				 if(this.msg != ''){
+				 	 this.stompClient.send("/app/websocket/message/handle", {}, JSON.stringify({
+			            'receiver':this.$route.query.uid,
+			            'content':this.msg
+			    	 }));
+			    	  this.msg = '';
+			     	//this.$refs.ref_a[0].click();
+				    this.$nextTick(function(){
+				     var e = document.getElementsByClassName('online-all')[0];
+				    	 setTimeout(function(){
+				    		 e.scrollTop=e.scrollHeight;
+				    	 },80)
+				    })
+				 }
+			},
+			saveHistory(){
+				//保存历史消息
+				if(localStorage.getItem(this.uid)){
+					let uidArr = [];
+					uidArr = this.message;
+					localStorage.setItem(this.uid,JSON.stringify(uidArr))
+				}else{
+					localStorage.setItem(this.uid,JSON.stringify(this.message))
+				}
 			}
 		},
-		deactivated() {
-
+		mounted(){
+			this.stomp();
+		},
+		beforeDestroy(){
+			this.saveHistory();
+			this.stompClient.disconnect();
+		},
+		computed:{
+			whoName(){
+				 return this.$route.query.uid; 
+			}
+		},
+		created(){
+			
+			this.uid = this.$route.query.uid;
+			this.$store.state.nick = this.uid;
+			//该好友是否有历史聊天
+			if(localStorage.getItem(this.uid)){
+				
+				this.message = JSON.parse(localStorage.getItem(this.uid))
+			}
+			
 		}
 	}
 </script>
@@ -153,11 +131,14 @@
 	
 	.online-all {
 		padding: 15px 12px;
+		overflow-y:scroll  !important;
+		height: 14.5rem;
 	}
 	
 	.online-for {
 		margin: 25px 0;
 		clear: both;
+		overflow: hidden;
 	}
 	
 	.online-tx {
@@ -184,10 +165,10 @@
 	
 	.online-time {
 		float: right;
-		color: #aaa;
+		color: #d7d7d7;
 		font-size: 12px;
 		/*no*/
-		display: none;
+		
 	}
 	
 	.online-name {
@@ -210,14 +191,12 @@
 	}
 	
 	.online-k {
-		width: 100%;
+		display: inline-block;
 		top: 25px;
 		z-index: 999;
 	}
-	
 	.send {
 		position: relative;
-		width: 85%;
 		height: auto;
 		background: #F8C301;
 		border-radius: 5px;
@@ -226,6 +205,8 @@
 		font-size: 12px;
 		line-height: 1.4em;
 		padding-right: 28px;
+		word-break: break-all;
+		word-wrap:break-word;
 	}
 	
 	.send .arrow {
@@ -253,6 +234,7 @@
 	.online-f .online-content {
 		margin-right: 62px;
 		margin-left: 0;
+		float: right;
 	}
 	
 	.online-f .online-tx {
@@ -263,6 +245,7 @@
 	
 	.online-f .online-name {
 		float: right;
+		text-align: right;
 	}
 	
 	.online-bottom {
