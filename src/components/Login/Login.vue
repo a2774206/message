@@ -137,7 +137,6 @@
 			},
 			RegisterBtn(){
 				//注册
-				
 			},
 			renovate() {
 				//login验证码刷新
@@ -167,7 +166,7 @@
 								}
 							},1000)
 						}else if(res.data.status=='error'){
-							thi.ModalStatus(res.data.message);
+							this.ModalStatus(res.data.message);
 						}
 					});	
 				}else{

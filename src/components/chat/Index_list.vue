@@ -2,14 +2,25 @@
 	<ul class="index_list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" 
 			infinite-scroll-distance="6">
 		<router-link v-for="(i,key) in list" to='/online'  tag='li' :key='key'>
-			<div class="my_tx">
+			
+			<mt-cell-swipe  
+            :right="[  
+                {  
+                    content: '删除',  
+                    style: { background: '#ff7900', color: '#fff'},  
+                    handler: () =>delContact()
+                }  
+            ]">  
+           <div class="my_tx">
 				<img src="../../../static/image/tx.png">
 			</div>
 			<div class="describe">
-				<h3>春蕾计划</h3>
+				<h3><span>李鹏鹏</span><div class="time">10:20</div></h3>
 				<p>春蕾计划，帮助老弱病残，欢迎您加入慈善事业..</p>
+				
 			</div>
-			<div class="time">2017-08-01 10:20</div>
+			
+        </mt-cell-swipe>  
 		</router-link>
 		 <center class="more_loading" v-show="true">
 	  		<mt-spinner type="triple-bounce" color="#00ccff" :size="20" v-show="true"></mt-spinner>
@@ -27,7 +38,7 @@
 		data() {
 			return {
 				msg: 'index_list',
-				list:[1,1,1,1,1,1],
+				list:[1,1,1],
 				loading:false
 			}
 		},
@@ -45,6 +56,9 @@
 			},
 			allLoaded(){
 				return false;
+			},
+			delContact(){
+				alert(1)
 			}
 		}
 	}
@@ -56,18 +70,19 @@
 		overflow-y: scroll;
 		padding-bottom: 85px;
 		height: 473px;
-		background: #e8e8e8;
+		background: #eee;
 		margin-top: 90px;
 	}
 	
 	.index_list li {
-		padding: 16px 15px;
-		width: 345px;
-		height: 47px;
+		padding:0;
+		width: 375px;
+		height: 67px;
 		text-align: left;
 		background: #fff;
 		margin-bottom: 1px; /*no*/
 		position: relative;
+		line-height: 67px;
 	}
 	
 	
@@ -82,13 +97,11 @@
 	}
 	
 	.describe h3 {
-		font-size: 15px;
-		/*no*/
-		margin-bottom: 5px;
-		/*no*/
-		margin-top: 1px;
-		/*no*/
-		font-weight: 500;
+		font-size: 14px;/*no*/
+		margin-bottom: 10px;
+		margin-top: 1px;/*no*/
+		font-weight: 200;
+		letter-spacing:1px ; /*no*/
 	}
 	
 	.describe p {
@@ -97,6 +110,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		color: #999898;
+		padding: 1px;
 		font-size: 14px;
 	}
 	
@@ -112,9 +126,10 @@
 	
 	.time {
 		width: 120px;
-		position: absolute;
-		right: 15px;
+		float: right;
+		text-align: right;
 		font-size: 12px;
-		color: #888787;
+		color: #D9D9D9;
 	}
+	
 </style>

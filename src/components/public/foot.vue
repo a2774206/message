@@ -128,6 +128,8 @@
 		align-items: center;
 		position: fixed;
 		bottom: 0;
+		border-top: 1px solid #dfdfdf;
+		overflow: hidden;
 	}
 	
 	.footer-list li {

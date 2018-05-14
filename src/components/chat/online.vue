@@ -32,7 +32,7 @@
 			<div class="online-input">
 				<input type="text" v-model="msg">
 			</div>
-			<div>
+			<div style="height: 100%;">
 				<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click="sendMessage">发送</button>
 			</div>
 		</div>
@@ -116,16 +116,14 @@
 		},
 		created(){
 			this.$nextTick(()=>{
-				     this.toBottom()
+				this.toBottom()
 			})
 			this.uid = this.$route.query.uid;
 			this.$store.state.nick = this.uid;
 			//该好友是否有历史聊天
 			if(localStorage.getItem(this.uid)){
-				
-				this.message = JSON.parse(localStorage.getItem(this.uid))
+				this.message = JSON.parse(localStorage.getItem(this.uid));
 			}
-			
 		}
 	}
 </script>
@@ -133,7 +131,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 	.online {}
-	
 	.online-all {
 		padding: 15px 12px;
 		overflow-y:scroll  !important;
@@ -145,7 +142,6 @@
 		clear: both;
 		overflow: hidden;
 	}
-	
 	.online-tx {
 		width: 45px;
 		height: 45px;
@@ -153,21 +149,17 @@
 		float: left;
 		margin-right: 15px;
 	}
-	
 	.fasong {
 		width: 80px;
 		margin: 0;
-		height: 36px;
-		margin-top: 4.5px;
+		height: calc(100% - 2px);
 		float: right;
 		font-size: 16px;
 	}
-	
 	.online-tx img {
 		width: 100%;
 		height: 100%;
 	}
-	
 	.online-time {
 		float: right;
 		color: #d7d7d7;
@@ -175,7 +167,6 @@
 		/*no*/
 		
 	}
-	
 	.online-name {
 		float: left;
 		width: 130px;
@@ -185,16 +176,13 @@
 		font-size: 14px;
 		color: #999;
 	}
-	
 	.online-info {
 		overflow: hidden;
 	}
-	
 	.online-content {
 		margin-left: 62px;
 		margin-top: -18px;
 	}
-	
 	.online-k {
 		display: inline-block;
 		top: 25px;
@@ -213,7 +201,6 @@
 		word-break: break-all;
 		word-wrap:break-word;
 	}
-	
 	.send .arrow {
 		position: absolute;
 		top: 5px;
@@ -225,34 +212,28 @@
 		border: solid 8px;
 		border-color: #fff #F8C301 #fff #fff;
 	}
-	
 	.online-f .send .arrow {
 		right: -16px;
 		left: inherit;
 		border-color: #fff #fff #fff #F8C301;
 	}
-	
 	.online-f .online-time {
 		float: left;
 	}
-	
 	.online-f .online-content {
 		margin-right: 62px;
 		margin-left: 0;
 		float: right;
 	}
-	
 	.online-f .online-tx {
 		float: right;
 		margin-left: 15px;
 		margin-right: 0;
 	}
-	
 	.online-f .online-name {
 		float: right;
 		text-align: right;
 	}
-	
 	.online-bottom {
 		width: 100%;
 		height: 44px;
@@ -261,23 +242,20 @@
 		bottom: 0px;
 		background: #f5f5f5;
 	}
-	
 	.online-input {
 		width: 295px;
 		float: left;
 		height: 30px;
 		margin-top: 9px;
 	}
-	
 	.online-input input {
 		height: 100%;
 		padding: 0 5px;
-		width: 98%;
+		width: 96%;
 		border: 0;
 		border-bottom: 1px solid #ccc;
 		outline: none;
 	}
-	
 	.online-input input:focus {
 		border-bottom-color: #65f747;
 	}

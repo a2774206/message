@@ -119,12 +119,15 @@
 	}
 	.is-plain{
 		width: 335px;
-		
 		margin-top: 30px;
 		border: 1px solid red;
 	}
 	#Login .mint-cell-wrapper{
 		border-bottom: 1px solid #969292;
+		
+	}
+	.index_list .mint-cell-wrapper{
+		padding: 0 27px !important;
 	}
 	.mint-button--default.is-plain{
 		border:1px solid #969292;/*no*/
@@ -135,8 +138,6 @@
 	}
 	#Login .mint-cell-wrapper{
 		margin: 5px 0;
-	}
-	#Login .mint-cell-wrapper{
 		background-image: none;
 	}
 	.mint-navbar .mint-tab-item.is-selected{
@@ -157,8 +158,8 @@
 		line-height: 30px;
 	}
 	#Login .v-modal,.addFriend .v-modal{
-		height: 40px;
-		line-height: 2px;
+		height: 44px;
+		line-height: 44px !important;
 		
 	}
 	#Login .mint-popup,.addFriend .mint-popup{
@@ -184,9 +185,34 @@
 		font-size: 16px;
 	}
 	.userList .mint-indexlist-content{
-		height: 550px !important;
+		height: 560px !important;
 	}
 	.userList .mint-indexlist-navitem{
-		padding: 2px 5px;
+		padding: 0.035rem 5px;
 	}
+	.index_list .mint-cell-wrapper{
+		background-image:none !important;
+	}
+	.index_list .mint-cell:last-child{
+		background-image:none;
+	}
+	.index_list .mint-cell,.index_list .mint-cell-value{
+		min-height: 100% !important;
+		height: 100%;
+	}
+	.index_list .mint-cell-title{
+		flex: 0;
+		-webkit-box-flex: 0;
+	}
+	.index_list .mint-cell-swipe-button{
+		line-height: 67px;
+	}
+	.index_list .mint-cell-right{
+		right: -1px;/*no*/
+	}
+	#Login .mint-popup .mint-popup-top{
+		width: 375px !important;
+   		text-align: center !important;
+	}
+	
 </style>
