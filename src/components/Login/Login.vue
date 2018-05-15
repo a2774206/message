@@ -108,6 +108,7 @@
 						this.$store.state.LoginStatus = true;
 						if(res.data.status=='success'){
 							this.status = '登录成功';
+							localStorage.setItem('islogin',true);
 							setTimeout(()=>{
 								this.$router.push('/')
 							},2000);

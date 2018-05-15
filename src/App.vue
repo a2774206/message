@@ -59,10 +59,13 @@
 		          Friend.$emit('newFriend', 2)
 		     },
 		     isLogin(){
-		     	if(!this.$store.state.LoginStatus){
-					this.$router.push('/login');
-					
-				}
+		     	//检测是否登陆过,登录且保持刷新在线
+		     	let isLoginStatus = localStorage.getItem('islogin');
+		     	if(isLoginStatus==null||isLoginStatus){
+		     		if(!this.$store.state.LoginStatus){
+						this.$router.push('/login');
+					}
+		     	}
 		     }
 		},
 		created(){
@@ -71,29 +74,6 @@
 			this.isLogin()
 			//去返回键
 			this.show = false;
-			
-			//console.log(this.$route.path)
-			//刷新后title传值，解决刷新后路由恢复/index
-//			switch(this.$route.path){
-//					case '/':
-//					this.router = '/index';
-//					break;
-//					case '/index':
-//					this.router = '/index';
-//					break;
-//					case '/userList':
-//					this.router = '/userList'
-//					break;
-//					case '/group':
-//					this.router = '/group'
-//					break;
-//					case '/my':
-//					this.router = '/my'
-//					break;
-//					case '/addFriend':
-//					this.router = '/addFriend'
-//					break;
-//				}
 			this.router = this.$route.path;
 		}
 	}

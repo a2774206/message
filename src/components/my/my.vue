@@ -47,7 +47,8 @@
 		},
 		methods: {
 			exit(){
-				this.sheetVisible = true;	
+				this.sheetVisible = true;
+				localStorage.setItem('islogin',false)
 			},
 			clearLocal(){
 				MessageBox({
@@ -61,9 +62,6 @@
 				});
 			}
 			
-		},
-		components: {
-
 		}
 	}
 </script>

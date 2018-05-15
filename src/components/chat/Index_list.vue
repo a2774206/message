@@ -17,7 +17,6 @@
 			<div class="describe">
 				<h3><span>李鹏鹏</span><div class="time">10:20</div></h3>
 				<p>春蕾计划，帮助老弱病残，欢迎您加入慈善事业..</p>
-				
 			</div>
 			
         </mt-cell-swipe>  

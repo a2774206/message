@@ -81,7 +81,7 @@
 				});	
 			},
 			ListA(){
-				//alert()
+				
 			}
 		},
 		created(){
