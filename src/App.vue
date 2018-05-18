@@ -60,8 +60,9 @@
 		     },
 		     isLogin(){
 		     	//检测是否登陆过,登录且保持刷新在线
+		     	console.log(this.$store.state.LoginStatus)
 		     	let isLoginStatus = localStorage.getItem('islogin');
-		     	if(isLoginStatus==null||isLoginStatus){
+		     	if(isLoginStatus==null||!isLoginStatus){
 		     		if(!this.$store.state.LoginStatus){
 						this.$router.push('/login');
 					}

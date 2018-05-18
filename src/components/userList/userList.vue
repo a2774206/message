@@ -3,7 +3,6 @@
 		<mt-index-list>
 			<mt-index-section index="A">
 				<mt-cell :title="A.code" v-for ="(A,i) in friendA" :key="i" v-on:click.native="$router.push({path:'/online',query:{uid:A.code}})"></mt-cell>
-				
 			</mt-index-section>
 			<mt-index-section index="B">
 				<mt-cell title="Baldwin"></mt-cell>
@@ -70,7 +69,7 @@
 				
 				this.axios({
 						method: 'post',
-						url: this.$store.state.ip+'/api/friend/list',
+						url: this.urlApi.friendList,
 						withCredentials:true
 				}).then(res => {
 					console.log(res.data.data)

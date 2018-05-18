@@ -55,26 +55,25 @@
 		},
 		methods: {
 			stomp() {
-				
-				var socket = new SockJS('/gs-guide-websocket');
+				var socket = new SockJS(this.urlApi.sockServer);
 				this.stompClient = Stomp.over(socket);
 
 				this.stompClient.connect({}, frame => {
 					//console.log('Connected: ' + frame);
 					//订阅消息发送后的通知
 					//console.log(this.stompClient)
-					this.stompClient.subscribe('/user/topic/message/handle/notify', data => {
+					this.stompClient.subscribe(this.urlApi.boxMessage, data => {
 						console.log((JSON.parse(data.body)).data)
 						this.message.push((JSON.parse(data.body)).data)
 					});
 
-					this.stompClient.send("/app/websocket/connect/notify", {}, JSON.stringify({}));
+					this.stompClient.send(this.urlApi.boxSend, {}, JSON.stringify({}));
 
 				});
 			},
 			sendMessage(){
 				 if(this.msg != ''){
-				 	 this.stompClient.send("/app/websocket/message/handle", {}, JSON.stringify({
+				 	 this.stompClient.send(this.urlApi.boxSend, {}, JSON.stringify({
 			            'receiver':this.$route.query.uid,
 			            'content':this.msg
 			    	 }));
@@ -255,6 +254,8 @@
 		border: 0;
 		border-bottom: 1px solid #ccc;
 		outline: none;
+		position: absolute;
+		bottom: 0;
 	}
 	.online-input input:focus {
 		border-bottom-color: #65f747;

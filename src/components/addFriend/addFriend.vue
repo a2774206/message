@@ -103,10 +103,9 @@
 					if(+friendreg||reg.test(friendreg)) {
 						this.waitico = true;
 						this.isAdd = true;
-						let PostUrl = this.$store.state.ip + '/api/friend/search'
 						this.axios({
 							method: 'post',
-							url: PostUrl,
+							url: this.urlApi.friendAPi,
 							data: {
 								keyword: this.SearchFriends.friend
 							}
@@ -131,10 +130,9 @@
 					}
 			},
 			AddFriendBtn() {
-				let PostUrl = this.$store.state.ip + '/api/friend/applyAdd'
 				this.axios({
 					method: 'post',
-					url: PostUrl,
+					url: this.urlApi.applyAdd,
 					data: {
 						friendCode: this.FriendInfo.uid
 					}

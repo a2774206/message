@@ -13,7 +13,7 @@
 					<mt-field label="账号" placeholder="请输入邮箱/ID" type="text" v-model="LoginData.id"></mt-field>
 					<mt-field label="密码" placeholder="请输入密码" type="password" v-model="LoginData.password"></mt-field>
 					<div class="v">
-						<mt-field label="验证码" placeholder="请输入验证码" type="text" v-model="LoginData.yanzheng" class='v'></mt-field>
+						<mt-field label="验证码" placeholder="请输入验证码" type="text" v-model="LoginData.yanzheng" class='v' ></mt-field>
 						<p class="yzm_img">
 							<img :src="YzmSrc" @click="renovate">
 						</p>
@@ -22,7 +22,7 @@
 					<p class="r_right">
 						<a>忘记密码？</a>
 					</p>
-					<mt-button plain @click.native="Loginbtn" @keyup.native.enter="Loginbtn">登录</mt-button>
+					<mt-button plain @click.native="Loginbtn" >登录</mt-button>
 				</mt-tab-container-item>
 				<mt-tab-container-item id="2">
 					<mt-field label="" placeholder="请输入昵称" v-model="RegisterData.nickName"></mt-field>
@@ -34,7 +34,7 @@
 						</mt-button>
 					</div>
 					<mt-field label="" placeholder="请输入密码" type="password" v-model="RegisterData.registermm"></mt-field>
-					<mt-button plain v-on:click='RegisterBtn'>注册</mt-button>
+					<mt-button plain v-on:click.native='RegisterBtn'>注册</mt-button>
 				</mt-tab-container-item>
 
 			</mt-tab-container>
@@ -60,12 +60,11 @@
 				status:'登陆成功',
 				RegisterSendBtn:'发送',
 				RegisterStatus:false,
-				YzmSrc: this.$store.state.ip + '/api/login/verifyCode?width=80&height=30',
+				YzmSrc: this.urlApi.yzmSrc,
 				//登陆数据
 				LoginData: {
 					id: '10002',
-					username: '',
-					loginmm: '',
+					nickName: '',
 					password:'asd123456789',
 					phone: '',
 					yanzheng: '',
@@ -81,26 +80,28 @@
 			}
 		},
 		methods: {
+			encrypts(str){
+				//md5加密
+				let md5 = hex_md5(str);
+				//哈希加密
+				let sha = hex_sha1(md5);
+				//返回AES加密
+				return Encrypt(sha);
+			},
 			Loginbtn() {
 				if(this.LoginData.id!=''||this.LoginData.loginmm!=''){
-					//md5加密||this.LoginData.yanzheng!=''
-					let md5word = hex_md5(this.LoginData.password);
-					//哈希加密
-					var hashword = hex_sha1(md5word);
-					//AES加密
-					let aes = Encrypt(hashword);
+					
 					//login参数集合
 					let parameter = {
 						name: this.LoginData.id,
-						password: aes
+						password: this.encrypts(this.LoginData.password)
 //						,
 //						verifyCode: this.LoginData.yanzheng
 					}
 					//登陆后台提交
-					let PostUrl = this.$store.state.ip + '/api/login/commit';
 					this.axios({
 						method: 'post',
-						url: PostUrl,
+						url: this.urlApi.loginApi,
 						data: parameter,
 						withCredentials:true
 					}).then(res => {
@@ -110,7 +111,8 @@
 							this.status = '登录成功';
 							localStorage.setItem('islogin',true);
 							setTimeout(()=>{
-								this.$router.push('/')
+								this.$router.push('/');
+								console.log(5454)
 							},2000);
 						}else{
 							//登录失败刷验证
@@ -136,13 +138,9 @@
 					this.popupVisible = false;
 				},timer);
 			},
-			RegisterBtn(){
-				//注册
-			},
 			renovate() {
 				//login验证码刷新
-				let yzm = this.YzmSrc;
-				this.YzmSrc = this.$store.state.ip + '/api/login/verifyCode?width=80&height=30&' + Math.random();
+				this.YzmSrc = this.urlApi.yzmSrc + Math.random();
 			},
 			RegisterSend(){
 				//注册邮箱发送验证码
@@ -150,7 +148,7 @@
 				if(this.RegisterData.email != '' && reg.test(this.RegisterData.email)){
 					this.axios({
 						method: 'post',
-						url: this.$store.state.ip +'/api/register/email',
+						url: this.urlApi.mailCode,
 						data: {'email':this.RegisterData.email},
 						withCredentials:true
 					}).then(res => {
@@ -177,23 +175,16 @@
 			},
 			RegisterBtn(){
 				//注册密码三层加密
-				//md5加密
-				let md5 = hex_md5(this.RegisterData.registermm);
-				//哈希加密
-				let sha = hex_sha1(md5);
-				//AES加密
-				let aes = Encrypt(aes);
-				//注册参数集合
-				console.log(aes)
+				
 				let _register = {
 					 "email": this.RegisterData.email,
 					  "nickName": this.RegisterData.nickName,
-					  "password": aes,
+					  "password": this.encrypts(this.RegisterData.registermm),
 					  "verifyCode": this.RegisterData.yanzheng
 				}
 				this.axios({
 						method: 'post',
-						url: this.$store.state.ip+'/api/register/commit',
+						url: this.urlApi.register,
 						data: _register,
 						withCredentials:true
 				}).then(res => {
@@ -208,12 +199,6 @@
 				});	
 				
 			}
-		},
-		created() {
-			
-		},
-		computed: {
-			
 		}
 	}
 </script>

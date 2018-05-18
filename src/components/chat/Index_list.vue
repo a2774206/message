@@ -1,7 +1,7 @@
 <template>
 	<ul class="index_list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" 
 			infinite-scroll-distance="6">
-		<router-link v-for="(i,key) in list" to='/online'  tag='li' :key='key'>
+		<router-link v-for="(i,key) in list" to='/online'  tag='li' :key='key' class='friend-li'>
 			
 			<mt-cell-swipe  
             :right="[  
@@ -17,10 +17,12 @@
 			<div class="describe">
 				<h3><span>李鹏鹏</span><div class="time">10:20</div></h3>
 				<p>春蕾计划，帮助老弱病残，欢迎您加入慈善事业..</p>
+				<mt-badge type="error" size="small" class="badges">10</mt-badge>
 			</div>
 			
         </mt-cell-swipe>  
 		</router-link>
+		
 		 <center class="more_loading" v-show="true">
 	  		<mt-spinner type="triple-bounce" color="#00ccff" :size="20" v-show="true"></mt-spinner>
 	  		<span v-show="allLoaded()">扯到底了</span>
@@ -73,7 +75,7 @@
 		margin-top: 90px;
 	}
 	
-	.index_list li {
+	.index_list li.friend-li {
 		padding:0;
 		width: 375px;
 		height: 67px;
@@ -93,6 +95,14 @@
 	
 	.describe {
 		margin-left: 7px;
+		position: relative;
+		width: 258.5px;
+	}
+	.describe .badges{
+		position: absolute;
+		right: 0;
+		top: calc(67px / 2 - 12px);
+		transform: scale(0.8);
 	}
 	
 	.describe h3 {
@@ -104,7 +114,7 @@
 	}
 	
 	.describe p {
-		width: 264px;
+		width: 230px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
