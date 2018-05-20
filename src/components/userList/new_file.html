@@ -1,11 +1,22 @@
 <template>
 	<div class="userList">
 		<mt-index-list>
-			<mt-index-section v-for='(word,i) in words' :index="word|toUpperCase" :key="word">
-				<mt-cell :title="nick(A)" v-for ="(A,i) in friendA" :key="i"
+			
+			<!--<mt-index-section>
+				<mt-cell :title="nick(A)" v-for ="(A,i) in friendSort.get('h')" :key="i"
+					v-on:click.native="$router.push({path:'/online',query:{uid:A.code,nick:nick(A)}})">
+				</mt-cell>
+			</mt-index-section>-->
+			<mt-index-section v-for='(word,i) in words' :index="word|daxie" :key="word">
+				<mt-cell :title="nick(A)" v-for ="(A,i) in friendSort.get(word)" :key="i"
 					v-on:click.native="$router.push({path:'/online',query:{uid:A.code,nick:nick(A)}})">
 				</mt-cell>
 			</mt-index-section>
+			<!--<mt-index-section index="A">
+				<mt-cell :title="nick(A)" v-for ="(A,i) in friendA" :key="i"
+					v-on:click.native="$router.push({path:'/online',query:{uid:A.code,nick:nick(A)}})">
+				</mt-cell>
+			</mt-index-section>-->
 			<!--<mt-index-section index="B">
 				<mt-cell title="Baldwin"></mt-cell>
 				<mt-cell title="Braden"></mt-cell>
@@ -66,7 +77,8 @@
 				msg: 'UserList',
 				friendA:[],
 				py:'',
-				words:["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+				words:["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+
 			}
 		},
 		methods:{
@@ -89,54 +101,75 @@
 				}else{
 					return A.nickName;
 				}
-			}
-//			,
+			},
 //			friendSort(){
 //				//初始化pinyin获取拼音
 //				this.py = new Pinyin();
+////				const word = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 //				
-//				console.log(this.friendA)
+////				console.log(this.friendA)
 //				let ary = this.friendA;
-//				var res = ary.map((item,index,input)=> {  			   
+//				const map = new Map()
+////				word.forEach(x => {
+////					map.has(x) ? map.get(x).push()
+////				})
+//				ary.forEach((item,index,input)=> {  		
+//					const word = this.py.getFullChars(this.nick(item)).toLowerCase().substr(0,1)
 //					//小写格式化
-//					if(this.py.getFullChars(this.nick(item)).toLowerCase().substr(0,1)==str){
-//						return input[index];
-//					}
+//					map.has(word)?map.get(word).push(item) : map.set(word,[item])
+//				
 //				})  
+//				console.log(map)
+//				return map
+////				var newRes = [];
+////				//console.log(res)
+////				for(var i = 0;i<res.length;i++){
+////					if((res[i])!=undefined){
+////						newRes.push(res[i]);
+////		gan			}
+////				}
+////				return newRes;
+//			}
+		},
+		created(){
+			this.LoadFrindList();
+			setTimeout(()=>{
+				console.log(this.friendSort())
+				
+			},300)
+		},
+		computed:{
+			h(){
+				return this.friendSort
+			},
+			friendSort(){
+				//初始化pinyin获取拼音
+				this.py = new Pinyin();
+//				const word = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+				
+//				console.log(this.friendA)
+				let ary = this.friendA;
+				const map = new Map()
+//				word.forEach(x => {
+//					map.has(x) ? map.get(x).push()
+//				})
+				if (!ary.length) return map
+				ary.forEach((item,index,input)=> {  		
+					const word = this.py.getFullChars(this.nick(item)).toLowerCase().substr(0,1)
+					//小写格式化
+					map.has(word)?map.get(word).push(item) : map.set(word,[item])
+				
+				})  
+				console.log(map)
+				return map
 //				var newRes = [];
 //				//console.log(res)
 //				for(var i = 0;i<res.length;i++){
 //					if((res[i])!=undefined){
 //						newRes.push(res[i]);
-//					}
+//		gan			}
 //				}
 //				return newRes;
-//			}
-		},
-		created(){
-			this.LoadFrindList();
-		},
-		computed:{
-			friendSort(){
-				//初始化pinyin获取拼音
-				this.py = new Pinyin();
-				
-				console.log(this.friendA)
-				let ary = this.friendA;
-				var res = ary.map((item,index,input)=> {  			   
-					//小写格式化
-					if(this.py.getFullChars(this.nick(item)).toLowerCase().substr(0,1)==str){
-						return input[index];
-					}
-				})  
-				var newRes = [];
-				//console.log(res)
-				for(var i = 0;i<res.length;i++){
-					if((res[i])!=undefined){
-						newRes.push(res[i]);
-					}
-				}
-				return newRes;
 			}
 		}
 	}

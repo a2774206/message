@@ -1,8 +1,10 @@
 <template>
 	<div class="heading">
-		<i class="mintui mintui-back" @click="back" v-show="isShows"></i>
-		<span>{{childs}}</span>
-		<center class="nickname" v-show='this.$store.state.nickname'>{{nick}}</center>
+		<i class="mintui mintui-back" @click="back" v-show="isShows" ></i>
+		<span >{{childs}}</span>
+		<center class="nickname" v-show='this.$store.state.nicknameShow'>
+			{{$route.query.nick}}
+		</center>
 		<router-link :to="{path:'/addFriend',query:{tab:4}}"><div class="btn-add">
 			<img src="../../../static/image/add.png">
 		</div></router-link>
@@ -68,8 +70,8 @@
 			
 		},
 		created(){
-				this.$store.state.nickname = true;
-			//console.log(this.$tore.state.nickname)
+				this.$store.state.nicknameShow = true;
+			//console.log(this.$tore.state.nicknameShow)
 		}
 	}
 </script>

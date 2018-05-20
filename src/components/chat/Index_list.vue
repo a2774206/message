@@ -39,7 +39,7 @@
 		data() {
 			return {
 				msg: 'index_list',
-				list:[1,1,1],
+				list:[1,1,1,2,5,5,5],
 				loading:false
 			}
 		},
@@ -102,11 +102,15 @@
 		position: absolute;
 		right: 0;
 		top: calc(67px / 2 - 12px);
-		transform: scale(0.8);
+		transition: all 0.5; 
+		transform: scale(0.9);
+		
 	}
-	
+	.describe .badges:hover{
+	/*	transition:cubic-bezier(5,.1,.25,1)*/
+	}
 	.describe h3 {
-		font-size: 14px;/*no*/
+		font-size: 14px;
 		margin-bottom: 10px;
 		margin-top: 1px;/*no*/
 		font-weight: 200;

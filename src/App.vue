@@ -2,7 +2,9 @@
 	<div id="app">
 		<heading :child='router' :isShow='show'></heading>
 		<div class="clex"></div>
-		<router-view />
+		<transition :name="transitionName">   
+	      <router-view></router-view>
+	    </transition>
 		<foot ></foot>
 	
 	</div>
@@ -26,7 +28,8 @@
 		data(){
 			return {
 				router:'/index',
-				show:true
+				show:true,
+				transitionName:''
 			}
 		},
 		components: {
@@ -47,11 +50,19 @@
 				}
 				this.router = to.path;
 				if(to.path == '/online'){
-					this.$store.state.nickname = true;
+					this.$store.state.nicknameShow = true;
 					
 				}else{
-					this.$store.state.nickname = false;
+					this.$store.state.nicknameShow = false;
 				}
+				
+				 if(to.meta.index > from.meta.index){
+        			//设置动画名称
+			        this.transitionName = 'slide-left';
+			      }else{
+			        this.transitionName = 'slide-right';
+			      }
+				
 			}
 		},
 		methods:{
@@ -111,7 +122,7 @@
 		padding: 0 27px !important;
 	}
 	.mint-button--default.is-plain{
-		border:1px solid #969292;/*no*/
+		border:1px solid #dadada;/*no*/
 		margin-bottom: 2px;
 	}
 	#Login .mint-tab-item .mint-tab-item-label{
@@ -166,7 +177,7 @@
 		font-size: 16px;
 	}
 	.userList .mint-indexlist-content{
-		height: 560px !important;
+		/*height: 560px !important;*/
 	}
 	.userList .mint-indexlist-navitem{
 		padding: 0.035rem 5px;
@@ -195,5 +206,40 @@
 		width: 375px !important;
    		text-align: center !important;
 	}
+	.slide-left-enter, .slide-right-leave-active {
+	  opacity: 0;
+	  -webkit-transform: translate(50px, 0);
+	  transform: translate(50px, 0);
+	}
+	.slide-left-leave-active, .slide-right-enter {
+	  opacity: 0;
+	  -webkit-transform: translate(-50px, 0);
+	  transform: translate(-50px, 0);
+	}
+	.slide-right-enter-active,
+	.slide-right-leave-active,
+	.slide-left-enter-active,
+	.slide-left-leave-active {
+	  will-change: transform;
+	  transition:all 0.1s cubic-bezier(.17, .86, .23, .14);
+	  position: absolute;
+	}
+	.slide-right-enter {
+	  opacity: 0;
+	  transform: translate3d(-100%, 0, 0);
+	}
+	.slide-right-leave-active {
+	  opacity: 0;
+	  transform: translate3d(100%, 0, 0);
+	}
+	.slide-left-enter {
+	  opacity: 0;
+	  transform: translate3d(100%, 0, 0);
+	}
+	.slide-left-leave-active {
+	  opacity: 0;
+	  transform: translate3d(-100%, 0, 0);
+	}
+
 	
 </style>

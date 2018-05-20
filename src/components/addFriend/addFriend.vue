@@ -43,6 +43,7 @@
 			<mt-tab-container-item id="3">
 				<!--<mt-cell v-for="n in 6" :title="'选项 ' + n" />-->
 				<!--<mt-cell v-for="n in 6" :title="'张三 ' + n+'请求加您为好友'" />-->
+				
 
 			</mt-tab-container-item>
 		</mt-tab-container>
@@ -91,6 +92,7 @@
 			})
 		},
 		methods: {
+			
 			print(value) {
 				console.log(value)
 				this.selected = value;

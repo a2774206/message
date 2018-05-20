@@ -106,13 +106,15 @@
 						withCredentials:true
 					}).then(res => {
 						this.ModalStatus(res.data.message);
-						this.$store.state.LoginStatus = true;
 						if(res.data.status=='success'){
 							this.status = '登录成功';
+							console.log(res.data)
+							this.$store.state.LoginStatus = true;
+							this.$store.state.nickname = res.data.data.nickName;
+							this.$store.state.uid = res.data.data.code;
 							localStorage.setItem('islogin',true);
 							setTimeout(()=>{
 								this.$router.push('/');
-								console.log(5454)
 							},2000);
 						}else{
 							//登录失败刷验证

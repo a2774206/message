@@ -10,7 +10,7 @@ let apiUrl = {
 	boxMessage:domain + '/user/topic/message/handle/notify', //聊天窗口页订阅地址
 	boxSend:domain + '/app/websocket/message/handle',//聊天窗口发送消息
 	friendAPi:domain + '/api/friend/search',		//查询好友
-	applyAdd:domain + '/api/friend/applyAdd',  	   //添加好友
+	applyAdd:domain + '/api/friend/add/apply',  	   //添加好友
 	friendList:domain + '/api/friend/list'    	  //好友列表
 }
 export default apiUrl;

@@ -6,8 +6,8 @@
 					<img src="../../../static/image/tx.png">
 				</div>
 				<div class="describe">
-					<h3>李鹏鹏</h3>
-					<p>ID:2774206</p>
+					<h3>{{_nickName}}</h3>
+					<p>ID:<span>{{this.$store.state.uid}}</span></p>
 				</div>
 				<div class="time">
 					<img src="../../../static/image/setting.png">
@@ -62,6 +62,11 @@
 				});
 			}
 			
+		},
+		computed:{
+			_nickName(){
+				return this.$store.state.nickname;
+			}
 		}
 	}
 </script>
@@ -101,7 +106,7 @@
 		margin-bottom: 1px; /*no*/
 		position: relative;
 		border-top: 20px solid #f0f0f0;
-		border-bottom: 2px solid #f0f0f0;
+		border-bottom: 20px solid #f0f0f0;
 		background: #fff;
 	}
 	.my_tx {
@@ -149,7 +154,7 @@
 		width: 40px;
 		position: absolute;
 		right: 0px;
-		font-size: 12px;
+		font-size: 12px !important;
 		color: #888787;
 		top:calc(50% - 10px);
 	}
@@ -179,9 +184,11 @@
 		text-align: center;
 		padding: 0;
 		margin: 0;
-		margin-top:4px; /*no*/
+		
 		display: block;
 		background:#fff;
 		font-size: 14px;
+		border-top: 1px solid #e8e8e8;/*no*/ 
+		border-bottom: 1px solid #e8e8e8;/*no*/
 	}
 </style>

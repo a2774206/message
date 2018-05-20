@@ -6,7 +6,8 @@ export default new vuex.Store({
 		show:false,
 		ip:'http://127.0.0.1:8080', //请求ip地址http://39.104.169.117
 		LoginStatus:false,
-		nickname:true,
-		nick:''
+		nicknameShow:true,
+		nickname:'',
+		uid:''
 	}
 })

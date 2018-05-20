@@ -14,40 +14,48 @@ routes: [
     {
       path: '/',
       name: 'Index',
+      meta:{index:1},
       component: Index
     },
     {
       path: '/Index',
       name: 'Index',
+      meta:{index:1},
       component: Index
     },
     {
       path: '/Login',
       name: 'Login',
+      meta:{index:0},
       component: Login
     },
     {
       path: '/userList',
       name: 'userList',
+      meta:{index:2},
       component: userList,
     },
     {
       path: '/group',
       name: 'group',
+      meta:{index:3},
       component: group
     },
     {
       path: '/my',
       name: 'my',
+      meta:{index:4},
       component: my
     },
     {
       path: '/addFriend',
       name: 'addFriend',
+      meta:{index:2},
       component: addFriend
     },{
 	    path:'/online',
 	    name: 'online',
+	    meta:{index:2},
 	    component:online
 	 }
 ]

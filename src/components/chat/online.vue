@@ -1,6 +1,6 @@
 <template>
 	<div class="online">
-		<div class="online-all">
+		<div class="online-all" ref="online">
 			<div class="online-for" v-for="(item,i) in message" :key='i' :class="{'online-f':whoName==item.receiver}">
 				<div class="online-info">
 					<div class="online-tx">
@@ -19,6 +19,7 @@
 					<div class="online-k">
 						<div class="send">
 							{{item.content}}
+							
 							<div class="arrow">
 
 							</div>
@@ -29,11 +30,18 @@
 			</div>
 		</div>
 		<div class="online-bottom">
-			<div class="online-input">
-				<input type="text" v-model="msg">
-			</div>
-			<div style="height: 100%;">
-				<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click="sendMessage">发送</button>
+			<div class="relav">
+				<ul class="emoji_imgs" v-show="emojiShow">
+					<li v-for="i in _emoji" v-html="i" @click="addEmoji(i)">
+						
+					</li>
+				</ul>
+				<div class="online-input">
+					<input type="text" v-model="msg" @input="showEmoji">
+				</div>
+				<div style="height: 100%;">
+					<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click="sendMessage">发送</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -43,6 +51,7 @@
 	import Vue from 'Vue';
 	import SockJS from 'sockjs-client';
 	import Stomp from 'stomp-websocket';
+	let emoji = require('../../../static/js/emoji.js');
 	export default {
 		name: 'online',
 		data() {
@@ -50,7 +59,9 @@
 				msg:'',
 				stompClient:'',
 				message:[],
-				uid:''
+				uid:'',
+				_emoji:'',
+				emojiShow:false
 			}
 		},
 		methods: {
@@ -77,6 +88,7 @@
 			            'receiver':this.$route.query.uid,
 			            'content':this.msg
 			    	 }));
+			    	  this.emojiShow = false;
 			    	  this.msg = '';
 			     	//this.$refs.ref_a[0].click();
 				    this.$nextTick(()=>{
@@ -95,10 +107,27 @@
 				}
 			},
 			toBottom(){
-				var e = document.getElementsByClassName('online-all')[0];
-				 setTimeout(function(){
-				     e.scrollTop=e.scrollHeight;
-				 },80)
+				var el = this.$refs.online;
+				setTimeout(function(){
+				 	el.scrollTop = el.scrollHeight;
+				},80)
+			},
+			addEmoji(i){
+				this.msg  = this.msg.replace(/\/emoji/,i);
+				this.emojiShow = false;
+			},
+			showEmoji(){
+				
+				//console.log(this.msg.slice(-1,-6))
+				if(this.msg.length>=6){
+					if(this.msg.slice(-6)=='/emoji'){
+						this.emojiShow = true;
+					}else{
+						this.emojiShow = false;
+					}
+				}else{
+					this.emojiShow = false;
+				}
 			}
 		},
 		mounted(){
@@ -114,11 +143,15 @@
 			}
 		},
 		created(){
+			//使用表情
+			this._emoji = emoji.default.emoji;
 			this.$nextTick(()=>{
 				this.toBottom()
 			})
 			this.uid = this.$route.query.uid;
-			this.$store.state.nick = this.uid;
+			//url字符串解码
+			let nick = decodeURI(this.$route.query.nick)
+//			this.$store.state.nickname = nick;
 			//该好友是否有历史聊天
 			if(localStorage.getItem(this.uid)){
 				this.message = JSON.parse(localStorage.getItem(this.uid));
@@ -129,7 +162,26 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-	.online {}
+	.relav{
+		position: relative;
+		height: 100%;
+	}
+	.emoji_imgs{
+		position: absolute;
+		top: -76px;
+		height:60px;
+		width: calc(100% - 30px);
+		background: #fff;
+		left:0px;
+		padding: 5px 15px;
+	}
+	.emoji_imgs li{
+		float: left;
+		font-size: 19px;
+		list-style: none;
+		text-align: center;
+		letter-spacing: 5px;
+	}
 	.online-all {
 		padding: 15px 12px;
 		overflow-y:scroll  !important;
@@ -234,27 +286,28 @@
 		text-align: right;
 	}
 	.online-bottom {
-		width: 100%;
+		width: calc(100% - 10px);
 		height: 44px;
 		border-top: 1px solid #c9c9ca;
 		position: fixed;
 		bottom: 0px;
 		background: #f5f5f5;
+		padding: 5px;
+	
 	}
 	.online-input {
-		width: 295px;
+		width: 285px;
 		float: left;
-		height: 30px;
-		margin-top: 9px;
+		height: calc(100% - 2px);
+		
 	}
 	.online-input input {
-		height: 100%;
-		padding: 0 5px;
-		width: 96%;
+		width: 100%;
 		border: 0;
 		border-bottom: 1px solid #ccc;
 		outline: none;
-		position: absolute;
+		height: 100%;
+		background: transparent;
 		bottom: 0;
 	}
 	.online-input input:focus {
