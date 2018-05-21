@@ -9,16 +9,21 @@
 					<h3>{{_nickName}}</h3>
 					<p>ID:<span>{{this.$store.state.uid}}</span></p>
 				</div>
-				<div class="time">
+				<div class="time" @click="setting">
 					<img src="../../../static/image/setting.png">
 				</div>
 			</div>
 		</ul>
+		
+	
 		<ul class="tools">
-			<li @click="clearLocal">清除聊天记录</li>
-			<li class="exit" @click="exit">退出</li>
+			<li @click="clearLocal">聊天记录</li>
+			<li @click="clearLocal">账户安全</li>
+			<li class="exit" @click="exit">退出登录</li>
+			
 		</ul>
 		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
+		<mt-actionsheet :actions="actions1"  v-model="sheetVisible1"></mt-actionsheet>
 	</div>
 </template>
 
@@ -34,6 +39,36 @@
 				actions:[
 					{
 						name:'退出账号',method:()=>{
+						Toast('已退出');
+						this.$store.state.LoginStatus = false;
+							setTimeout(()=>{
+								this.$router.push('/login')
+							},1220)
+						
+						}
+					}
+				],
+				sheetVisible1:false,//setting
+				actions1:[
+					{
+						name:'修改昵称',method:()=>{
+						MessageBox.prompt('请输入昵称').then(({ value, action }) => {
+							this.axios({
+								method: 'post',
+								url: this.urlApi.updateNick,
+								data: {'nickname':value}
+							}).then(res => {
+								if(res.data.status=='success'){
+									this.$store.state.nickname = value;	
+									Toast('修改成功');
+								}
+							})
+						});
+						
+						}
+					},
+					{
+						name:'更换头像',method:()=>{
 						Toast('已退出');
 						this.$store.state.LoginStatus = false;
 							setTimeout(()=>{
@@ -60,6 +95,9 @@
 				  Toast('清除成功');
 				  localStorage.clear();
 				});
+			},
+			setting(){
+				this.sheetVisible1 = true;
 			}
 			
 		},
@@ -138,7 +176,7 @@
 		font-size: 14px;
 	}
 	#my{
-		background: #e8e8e8;
+		background: #f0f0f0;
 	}
 	.describe,
 	.my_tx {

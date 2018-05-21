@@ -42,7 +42,7 @@
 			}
 		},
 		created(){
-			this.stomp();
+//			this.stomp();
 		}
 	}
 </script>

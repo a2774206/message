@@ -145,14 +145,9 @@
 			friendSort(){
 				//初始化pinyin获取拼音
 				this.py = new Pinyin();
-//				const word = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
-				
-//				console.log(this.friendA)
+//				
 				let ary = this.friendA;
-				const map = new Map()
-//				word.forEach(x => {
-//					map.has(x) ? map.get(x).push()
-//				})
+				const map = new Map();
 				if (!ary.length) return map
 				ary.forEach((item,index,input)=> {  		
 					const word = this.py.getFullChars(this.nick(item)).toLowerCase().substr(0,1)
