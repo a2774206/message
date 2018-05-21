@@ -84,14 +84,12 @@
 				else if(to.path=='/'){
 					this.footShow = true;
 				}
-//				
-				
 			}
+
 		},
 		created(){
 			//tab刷新图片显示初始化
 			let str = this.$route.query.tab;
-			
 			if(str<=3&&str!=0){
 				this.styleSwitch[str].url = this.styleSwitch[str].url2
 			}else{

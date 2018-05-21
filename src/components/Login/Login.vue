@@ -120,7 +120,7 @@
 							//登录失败刷验证
 							this.renovate();
 							this.LoginData.yanzheng = '';
-							console.log(res.data)
+							//console.log(res.data)
 						}
 					});	
 				}else{

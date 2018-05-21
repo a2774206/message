@@ -17,11 +17,15 @@
 		
 	
 		<ul class="tools">
-			<li @click="clearLocal">聊天记录</li>
-			<li @click="clearLocal">账户安全</li>
-			<li class="exit" @click="exit">退出登录</li>
+			<li @click="clearLocal"><span>聊天记录</span></li>
+			<li @click="clearLocal"><span>账户安全</span></li>
+		
 			
 		</ul>
+		<ul class="tools_exit" >
+			<li class="exit" @click="exit"><span>退出登录</span></li>
+		</ul>
+			
 		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
 		<mt-actionsheet :actions="actions1"  v-model="sheetVisible1"></mt-actionsheet>
 	</div>
@@ -176,7 +180,7 @@
 		font-size: 14px;
 	}
 	#my{
-		background: #f0f0f0;
+		background: #f5f5f5;
 	}
 	.describe,
 	.my_tx {
@@ -215,18 +219,28 @@
 		padding: 0;
 		margin: 0;
 	}
-	.tools li{
+	.tools li,.tools_exit li{
 		width: 100%;
 		height: 40px;
 		line-height:40px;
-		text-align: center;
+		text-align: left;
 		padding: 0;
 		margin: 0;
-		
 		display: block;
 		background:#fff;
 		font-size: 14px;
 		border-top: 1px solid #e8e8e8;/*no*/ 
 		border-bottom: 1px solid #e8e8e8;/*no*/
+	}
+	.tools_exit li{
+		margin-top: 20px;
+		text-align: center;
+	}
+	/*.tools li::before{
+		content: "\E600";
+	}*/
+	.tools li span{
+		display: inline-block;
+		margin-left: 15px;
 	}
 </style>

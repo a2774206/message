@@ -26,8 +26,9 @@
 						</div>
 					</div>
 				</div>
-
+				
 			</div>
+			<div class="online-44"></div>
 		</div>
 		<div class="online-bottom">
 			<div class="relav">
@@ -239,6 +240,11 @@
 		top: 25px;
 		z-index: 999;
 	}
+	.online-44{
+		height: 44px;
+		width: 100%;
+		clear: both;
+	}
 	.send {
 		position: relative;
 		height: auto;
@@ -264,7 +270,7 @@
 		border-color: #fff #F8C301 #fff #fff;
 	}
 	.online-f .send .arrow {
-		right: -16px;
+		right: -15px;
 		left: inherit;
 		border-color: #fff #fff #fff #F8C301;
 	}

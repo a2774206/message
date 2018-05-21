@@ -5,7 +5,7 @@
 		<transition :name="transitionName">   
 	      <router-view></router-view>
 	    </transition>
-		<foot ></foot>
+		<foot></foot>
 	
 	</div>
 </template>
@@ -29,7 +29,8 @@
 			return {
 				router:'/index',
 				show:true,
-				transitionName:''
+				transitionName:'',
+				Foot:false
 			}
 		},
 		components: {
@@ -81,7 +82,7 @@
 		     }
 		},
 		created(){
-			
+			let str = this.$route.query.tab;
 			//是否登录
 			this.isLogin()
 			//去返回键
