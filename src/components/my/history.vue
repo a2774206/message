@@ -1,35 +1,14 @@
 <template>
 	<div id="my">
-		<ul class="index_listJ">
-			<div class="li">
-				<div class="my_tx">
-					<img src="../../../static/image/tx.png">
-				</div>
-				<div class="describe">
-					<h3>{{_nickName}}</h3>
-					<p>ID:<span>{{this.$store.state.uid}}</span></p>
-				</div>
-				<div class="time" @click="setting">
-					<img src="../../../static/image/setting.png">
-				</div>
-			</div>
+		<ul class="tools">
+			<li @click="watHistory">
+				<span>查看聊天记录<i class="mintui mintui-back setting_rotate"></i></span>
+			</li>
+			<li @click="clearLocal">
+				<span>清除聊天记录<i class="mintui mintui-back setting_rotate"></i></span>
+			</li>
 		</ul>
 		
-	
-		<ul class="tools">
-			<li @click="$router.push({path:'/history'})">
-				<span>聊天记录<i class="mintui mintui-back setting_rotate"></i></span>
-			</li>
-			<li @click="$router.push({path:'/security'})">
-				<span>账户安全<i class="mintui mintui-back setting_rotate"></i></span>
-			</li>
-		</ul>
-		<ul class="tools_exit" >
-			<li class="exit" @click="exit"><span>退出登录</span></li>
-		</ul>
-			
-		<mt-actionsheet :actions="actions" v-model="sheetVisible"></mt-actionsheet>
-		<mt-actionsheet :actions="actions1"  v-model="sheetVisible1"></mt-actionsheet>
 	</div>
 </template>
 
@@ -37,53 +16,14 @@
 	import Vue from 'Vue'
 	import { Actionsheet,Toast ,MessageBox } from 'mint-ui';
 	export default {
-		name: 'My',
+		name: 'historys',
 		data() {
 			return {
-				sheetVisible:false,
-				actions:[
-					{
-						name:'退出账号',method:()=>{
-						Toast('已退出');
-						this.$store.state.LoginStatus = false;
-							setTimeout(()=>{
-								this.$router.push('/login')
-							},1220)
-						
-						}
-					}
-				],
-				sheetVisible1:false,//setting
-				actions1:[
-					{
-						name:'修改昵称',method:()=>{
-						MessageBox.prompt('请输入昵称').then(({ value, action }) => {
-							this.axios({
-								method: 'post',
-								url: this.urlApi.updateNick,
-								data: {'nickname':value}
-							}).then(res => {
-								if(res.data.status=='success'){
-									this.$store.state.nickname = value;	
-									Toast('修改成功');
-								}
-							})
-						});
-						
-						}
-					},
-					{
-						name:'更换头像',method:()=>{
-							Toast('开发中...');
-						}
-					}
-				]
 			}
 		},
 		methods: {
-			exit(){
-				this.sheetVisible = true;
-				localStorage.setItem('islogin',false)
+			watHistory(){
+				Toast('开发中...');
 			},
 			clearLocal(){
 				MessageBox({
@@ -95,16 +35,11 @@
 				  Toast('清除成功');
 				  localStorage.clear();
 				});
-			},
-			setting(){
-				this.sheetVisible1 = true;
 			}
 			
 		},
 		computed:{
-			_nickName(){
-				return this.$store.state.nickname;
-			}
+			
 		}
 	}
 </script>

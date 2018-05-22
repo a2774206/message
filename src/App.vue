@@ -11,13 +11,6 @@
 </template>
 
 <script>
-//	router.beforeEach((to, from, next) => {
-//		if(to.path == '/index'||to.query == 0){
-//			this.show = false;
-//		}
-//		next();
-//	});
-
 	import Vue from 'Vue';
 	import router from './router'
 	import heading from './components/public/head'
@@ -44,21 +37,12 @@
 				//监听路由发生变化，然后传值到head组件
 				//也可以在head中监听，这里可以简化，不用父子传值
 				//console.log(to.query)
-				if(to.path == '/index'||to.query == 0||to.path == '/'){
-					this.show = false;
-				}else{
-					this.show = true;
-				}
 				this.router = to.path;
-				if(to.path == '/online'){
-					this.$store.state.nicknameShow = true;
-					
-				}else{
-					this.$store.state.nicknameShow = false;
-				}
-				
+				this.show = (to.path == '/index'||to.query == 0||to.path == '/') ? false :true;
+				this.$store.state.nicknameShow = (to.path == '/online') ? true :false;
+			
+				//路由动画
 				 if(to.meta.index > from.meta.index){
-        			//设置动画名称
 			        this.transitionName = 'slide-left';
 			      }else{
 			        this.transitionName = 'slide-right';

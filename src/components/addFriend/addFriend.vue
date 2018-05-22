@@ -28,10 +28,10 @@
 								<p>ID:{{FriendInfo.uid}}</p>
 							</div>
 							<div class="time" @click="AddFriendBtn" v-if="isAdd">
-								<a>添加好友</a>
+								<a class="time-add">添加好友</a>
 							</div>
 							<div class="time" v-else>
-								<a>已申请</a>
+								<a class="time-yadd">已申请</a>
 							</div>
 						</div>
 					</ul>
@@ -274,5 +274,18 @@
 		height: 20px;
 		font-size: 16px;
 		line-height: 16px;
+	}
+	.time .time-add{
+		color: #333;
+		font-size: 12px;
+		border: 1px solid #333;
+		border-radius: 2px;
+		padding: 5px;
+	}
+	.time .time-yadd{
+		font-size: 12px;
+		border: 1px solid #888787;
+		border-radius: 2px;
+		padding: 5px;
 	}
 </style>

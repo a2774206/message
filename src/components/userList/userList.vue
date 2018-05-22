@@ -40,7 +40,7 @@
 				});	
 			},
 			nick(A){
-				console.log(A)
+				
 				if(A.aliasName!=''&& A.aliasName!=null){
 					return A.aliasName;
 				}else{

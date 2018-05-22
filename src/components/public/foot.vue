@@ -1,8 +1,8 @@
 <template>
 	<div class="footer" v-show="footShow">
 		<ul class="footer-list">
-			<router-link tag="li" :to="{path:tab.router,query:{tab:i}}" v-for="(tab,i) in styleSwitch" :key='i'>
-				<p v-on:click='active(tab,i)'>
+			<router-link tag="li" :to="{path:tab.router,query:{tab:i}}" v-for="(tab,i) in styleSwitch" :key='i' :class="{'router-link-active':i===3&&fshow}">
+				<p>
 					<i class="tx">
 						<img :src="defaultSrc+tab.url">
 					</i>
@@ -54,26 +54,28 @@
 						'url2': 'my1.png'
 					}
 				],
-				footShow:true
+				footShow:true,
+				fshow:false
 			}
 		},
 		methods: {
 			active(tab, i) {
-				//foot传值到head
-				//可以删掉整个事件及传值
+//				foot传值到head
+//				可以删掉整个事件及传值
 //				Bus.$emit('eventTitle', tab.title);
 			}
 		},
 		watch: {
 			'$route' (to, from) {
 				//这里通过路由传参简化
+				this.fshow = to.path == '/history'|| to.path == '/security'  ? true : false;
 				let str = to.query.tab;
 				//foot tab imgsrc切换
 				if(to.query.tab<=3){
 						document.title = this.styleSwitch[str].title;
 						for(let j = 0; j < this.styleSwitch.length; j++) {
 							this.styleSwitch[j].url = this.styleSwitch[j].url1
-					}
+						}
 					this.styleSwitch[str].url = this.styleSwitch[str].url2;
 					this.footShow = true;
 				}

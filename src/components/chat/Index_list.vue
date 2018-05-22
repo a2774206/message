@@ -1,7 +1,7 @@
 <template>
 	<ul class="index_list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" 
 			infinite-scroll-distance="6">
-		<router-link v-for="(i,key) in list" to='/online'  tag='li' :key='key' class='friend-li'>
+		<router-link v-for="(i,key) in list" to='/online'  tag='li' :key='key' class='friend-li' @click="delContact">
 			
 			<mt-cell-swipe  
             :right="[  

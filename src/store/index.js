@@ -8,6 +8,7 @@ export default new vuex.Store({
 		LoginStatus:false,
 		nicknameShow:true,
 		nickname:'',
-		uid:''
+		uid:'',
+		foottab:false
 	}
 })
