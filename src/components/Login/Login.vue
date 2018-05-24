@@ -47,9 +47,8 @@
 <script>
 	import Vue from 'Vue'
 	import { Field, Button, Navbar, TabItem, Popup } from 'mint-ui';
-//	import VueSocketio from 'vue-socket.io';
-//	import socketio from 'socket.io-client';
-//	Vue.use(VueSocketio, socketio('http://127.0.0.1:8080/gs-guide-websocket'));
+	import SockJS from 'sockjs-client';
+	import Stomp from 'stomp-websocket';
 	
 	export default {
 		name: 'Login',
@@ -63,7 +62,7 @@
 				YzmSrc: this.urlApi.yzmSrc,
 				//登陆数据
 				LoginData: {
-					id: '10002',
+					id: '10005',
 					nickName: '',
 					password:'asd123456789',
 					phone: '',
@@ -108,11 +107,11 @@
 						this.ModalStatus(res.data.message);
 						if(res.data.status=='success'){
 							this.status = '登录成功';
-							console.log(res.data)
 							this.$store.state.LoginStatus = true;
 							this.$store.state.nickname = res.data.data.nickName;
 							this.$store.state.uid = res.data.data.code;
 							localStorage.setItem('islogin',true);
+							this.socketInit();
 							setTimeout(()=>{
 								this.$router.push('/');
 							},2000);
@@ -120,7 +119,6 @@
 							//登录失败刷验证
 							this.renovate();
 							this.LoginData.yanzheng = '';
-							//console.log(res.data)
 						}
 					});	
 				}else{
@@ -200,7 +198,24 @@
 					}
 				});	
 				
-			}
+			},
+			socketInit(){
+		     	let socket,stompClient;
+		     	socket = this.$store.state.sockData.stompClient = new SockJS(this.urlApi.sockServer);
+				stompClient = this.$store.state.sockData.stompClient = Stomp.over(socket);
+				const mapData = this.$store.state.sockData.data;
+				stompClient.connect({}, frame => {
+					stompClient.subscribe(this.urlApi.boxMessage, data => {
+						let str = JSON.parse(data.body).data;
+						let M =(+str.receiver)+(+str.sender)
+						mapData.has(M) ? mapData.get(M).push(str) : mapData.set(M, [str])
+						console.log(mapData)
+				});
+					//告诉服务器我上线了
+					stompClient.send(this.urlApi.notice, {}, JSON.stringify({}));
+
+				});
+		     }
 		}
 	}
 </script>

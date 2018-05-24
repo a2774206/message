@@ -1,14 +1,12 @@
 <template>
 	<div class="online">
 		<div class="online-all" ref="online">
-			<div class="online-for" v-for="(item,i) in message" :key='i' :class="{'online-f':whoName==item.receiver}">
+			<div class="online-for" v-for="(item,i) in newMsg" :key='i' :class="{'online-f':state_uid==item.receiver}">
 				<div class="online-info">
 					<div class="online-tx">
 						<img src="../../../static/image/tx.png">
 					</div>
 					<div class="online-name">
-						<!--<span v-if="item.receiver==whoName">{{item.receiver}}</span>
-						<span v-if="item.receiver!=10002">{{item.sender}}</span>-->
 						{{item.sender}}
 					</div>
 					<div class="online-time">
@@ -19,10 +17,7 @@
 					<div class="online-k">
 						<div class="send">
 							{{item.content}}
-							
-							<div class="arrow">
-
-							</div>
+							<div class="arrow"></div>
 						</div>
 					</div>
 				</div>
@@ -33,12 +28,11 @@
 		<div class="online-bottom">
 			<div class="relav">
 				<ul class="emoji_imgs" v-show="emojiShow">
-					<li v-for="i in _emoji" v-html="i" @click="addEmoji(i)">
-						
+					<li v-for="i in emoji" v-html="i" @click="addEmoji(i)">
 					</li>
 				</ul>
 				<div class="online-input">
-					<input type="text" v-model="msg" @input="showEmoji">
+					<input type="text" v-model="msg" @input="showEmoji(6)">
 				</div>
 				<div style="height: 100%;">
 					<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click="sendMessage">发送</button>
@@ -59,104 +53,82 @@
 			return {
 				msg:'',
 				stompClient:'',
-				message:[],
+				newMsg:[],
 				uid:'',
-				_emoji:'',
-				emojiShow:false
+				emoji:'',
+				emojiShow:false,
+				uniqueId:''
 			}
 		},
 		methods: {
-			stomp() {
-				var socket = new SockJS(this.urlApi.sockServer);
-				this.stompClient = Stomp.over(socket);
-
-				this.stompClient.connect({}, frame => {
-					//console.log('Connected: ' + frame);
-					//订阅消息发送后的通知
-					//console.log(this.stompClient)
-					this.stompClient.subscribe(this.urlApi.boxMessage, data => {
-						console.log((JSON.parse(data.body)).data)
-						this.message.push((JSON.parse(data.body)).data)
-					});
-
-					this.stompClient.send(this.urlApi.boxSend, {}, JSON.stringify({}));
-
-				});
-			},
+//			getData(){
+//				this.$nextTick(()=>{
+//					this.message = this.$store.state.sockData.data.get(this.uniqueId);
+//					//console.log(this.message)
+//				})
+//			},
 			sendMessage(){
 				 if(this.msg != ''){
-				 	 this.stompClient.send(this.urlApi.boxSend, {}, JSON.stringify({
+				 	 let stompClient = this.$store.state.sockData.stompClient;
+				 		stompClient.send(this.urlApi.boxSend, {}, JSON.stringify({
 			            'receiver':this.$route.query.uid,
 			            'content':this.msg
-			    	 }));
-			    	  this.emojiShow = false;
-			    	  this.msg = '';
-			     	//this.$refs.ref_a[0].click();
-				    this.$nextTick(()=>{
-				     this.toBottom()
-				    })
-				 }
+			    		}));
+			    		this.newMsg = this.message;
+						this.emojiShow = false;
+			    		this.msg = '';
+			    	
+			    }
 			},
 			saveHistory(){
 				//保存历史消息
-				if(localStorage.getItem(this.uid)){
-					let uidArr = [];
-					uidArr = this.message;
-					localStorage.setItem(this.uid,JSON.stringify(uidArr))
-				}else{
-					localStorage.setItem(this.uid,JSON.stringify(this.message))
-				}
+//				if(localStorage.getItem(this.uid)){
+//					let uidArr = [];
+//					uidArr = this.message;
+//					localStorage.setItem(this.uid,JSON.stringify(uidArr))
+//				}else{
+//					localStorage.setItem(this.uid,JSON.stringify(this.message))
+//				}
 			},
 			toBottom(){
 				var el = this.$refs.online;
-				setTimeout(function(){
-				 	el.scrollTop = el.scrollHeight;
+				setTimeout(()=>{
+					el.scrollTop = el.scrollHeight;
 				},80)
 			},
 			addEmoji(i){
 				this.msg  = this.msg.replace(/\/emoji/,i);
 				this.emojiShow = false;
 			},
-			showEmoji(){
-				
-				//console.log(this.msg.slice(-1,-6))
-				if(this.msg.length>=6){
-					if(this.msg.slice(-6)=='/emoji'){
-						this.emojiShow = true;
-					}else{
-						this.emojiShow = false;
-					}
+			showEmoji(size){
+				this.emoji = emoji.default.emoji;
+				if(this.msg.length>=size){
+					this.emojiShow = (this.msg.slice(-size)=='/emoji') ? true : false;
 				}else{
 					this.emojiShow = false;
 				}
 			}
 		},
-		mounted(){
-			this.stomp();
-		},
 		beforeDestroy(){
 			this.saveHistory();
-			this.stompClient.disconnect();
 		},
 		computed:{
-			whoName(){
-				 return this.$route.query.uid; 
+			state_uid(){
+				return this.$route.query.uid; 
+			},
+			message () {
+				if (!this.$store.state.sockData.data.get(this.uniqueId)) {
+					this.$store.state.sockData.data.set(this.uniqueId, [])
+				}
+				return this.$store.state.sockData.data.get(this.uniqueId);
 			}
 		},
-		created(){
-			//使用表情
-			this._emoji = emoji.default.emoji;
-			this.$nextTick(()=>{
-				this.toBottom()
-			})
-			this.uid = this.$route.query.uid;
-			//url字符串解码
-			let nick = decodeURI(this.$route.query.nick)
-//			this.$store.state.nickname = nick;
-			//该好友是否有历史聊天
-			if(localStorage.getItem(this.uid)){
-				this.message = JSON.parse(localStorage.getItem(this.uid));
-			}
+		created(){	
+			this.uniqueId = Number(this.$store.state.uid) + Number(this.state_uid);
+			this.newMsg = this.message;
+//			
+			this.showEmoji(0)
+			this.emoji = emoji.default.emoji;
 		}
 	}
 </script>
@@ -261,7 +233,7 @@
 	.send .arrow {
 		position: absolute;
 		top: 5px;
-		left: -16px;
+		left: -15px;
 		/* 圆角的位置需要细心调试哦 */
 		width: 0;
 		height: 0;

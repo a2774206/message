@@ -94,7 +94,6 @@
 		methods: {
 			
 			print(value) {
-				console.log(value)
 				this.selected = value;
 			},
 			SearchFriend() {
@@ -127,7 +126,7 @@
 								this.f_list = false;
 								this.ModalStatus('请输入查询的用户ID或邮箱！')
 							}
-							console.log(res)
+							
 						});
 					}
 			},

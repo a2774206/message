@@ -71,7 +71,6 @@
 		},
 		created(){
 				this.$store.state.nicknameShow = true;
-			//console.log(this.$tore.state.nicknameShow)
 		}
 	}
 </script>

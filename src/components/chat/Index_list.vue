@@ -126,15 +126,19 @@
 		padding: 1px;
 		font-size: 14px;
 	}
-	
 	.describe,
 	.my_tx {
 		float: left;
 	}
-	
 	.my_tx img {
 		width: 100%;
 		height: 100%;
+		-webkit-filter: grayscale(100%);
+	    -moz-filter: grayscale(100%);
+	    -ms-filter: grayscale(100%);
+	    -o-filter: grayscale(100%);
+	    filter: grayscale(100%);
+		filter: gray;
 	}
 	
 	.time {

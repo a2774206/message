@@ -32,7 +32,7 @@
 						url: this.urlApi.friendList,
 						withCredentials:true
 				}).then(res => {
-					//console.log(res)
+					
 					if(res.data.status=="success"){
 						this.friendA = res.data.data;
 					}

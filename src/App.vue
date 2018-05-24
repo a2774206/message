@@ -36,27 +36,20 @@
 				this.isLogin();
 				//监听路由发生变化，然后传值到head组件
 				//也可以在head中监听，这里可以简化，不用父子传值
-				//console.log(to.query)
 				this.router = to.path;
 				this.show = (to.path == '/index'||to.query == 0||to.path == '/') ? false :true;
 				this.$store.state.nicknameShow = (to.path == '/online') ? true :false;
 			
 				//路由动画
-				 if(to.meta.index > from.meta.index){
-			        this.transitionName = 'slide-left';
-			      }else{
-			        this.transitionName = 'slide-right';
-			      }
-				
+				this.transitionName = to.meta.index > from.meta.index ? 'slide-left' : 'slide-right';
 			}
 		},
 		methods:{
-			friend(){
+			 friend(){
 		          Friend.$emit('newFriend', 2)
 		     },
 		     isLogin(){
 		     	//检测是否登陆过,登录且保持刷新在线
-		     	console.log(this.$store.state.LoginStatus)
 		     	let isLoginStatus = localStorage.getItem('islogin');
 		     	if(isLoginStatus==null||!isLoginStatus){
 		     		if(!this.$store.state.LoginStatus){
@@ -66,6 +59,9 @@
 		     }
 		},
 		created(){
+			if(!this.$store.state.LoginStatus){
+				this.$router.push('/login');
+			}
 			let str = this.$route.query.tab;
 			//是否登录
 			this.isLogin()

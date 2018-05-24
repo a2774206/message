@@ -3,11 +3,11 @@
 		<ul class="tools updateMsg">
 			<li>
 				<span>原密码：</span>
-				<input type="text" placeholder="请输入原密码" v-model="nowMsg" />
+				<input type="password" placeholder="请输入原密码" v-model="nowMsg" />
 			</li>
 			<li>
 				<span>新密码：</span>
-				<input type="text" placeholder="请输入新密码" v-model="newMsg" />
+				<input type="password" placeholder="请输入新密码" v-model="newMsg" />
 			</li>
 			<li style="margin-top:20px;" @click="upMsg">
 				<center>修改密码</center>
@@ -54,13 +54,22 @@
 								newPassword:this.encrypts(this.newMsg),
  								oldPassword:this.encrypts(this.nowMsg)
 							};
-							console.log(parameter)
-					 		this.axios({
+							this.axios({
 								method: 'post',
 								url: this.urlApi.updataPwd,
 								data: parameter
 							}).then(res => {
-								console.log(res)
+								console.log(res.data);
+								if(res.data.status=='success'){
+									Toast('修改成功，请重新登录');
+									setTimeout(()=>{
+										let stompClient = this.$store.state.sockData.stompClient;
+										stompClient.disconnect();
+										this.$router.push({'path':'/login'});
+									},1000)
+								}else if(res.data.status=='error'){
+									Toast(res.data.message);
+								}
 							});	
 						});
 					}

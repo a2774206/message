@@ -45,6 +45,8 @@
 					{
 						name:'退出账号',method:()=>{
 						Toast('已退出');
+						let stompClient = this.$store.state.sockData.stompClient;
+						stompClient.disconnect();
 						this.$store.state.LoginStatus = false;
 							setTimeout(()=>{
 								this.$router.push('/login')

@@ -9,6 +9,11 @@ export default new vuex.Store({
 		nicknameShow:true,
 		nickname:'',
 		uid:'',
-		foottab:false
+		foottab:false,
+		sockData:{
+			socket:'',
+			stompClient:'',
+			data: new Map()
+		}
 	}
 })

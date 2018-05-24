@@ -33,7 +33,6 @@
 						url: this.urlApi.friendList,
 						withCredentials:true
 				}).then(res => {
-					//console.log(res)
 					if(res.data.status=="success"){
 						this.friendA = res.data.data;
 					}
@@ -54,14 +53,6 @@
 		},
 		created(){
 			this.LoadFrindList();
-			
-		},
-		mounted(){
-			console.log(this.$refs.list)
-//			for(var i = 0;i<this.$refs.list.length;i++){
-//				var arr = this.$refs.list[i];
-//				
-//			}
 			
 		},
 		computed:{
