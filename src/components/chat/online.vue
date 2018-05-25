@@ -61,12 +61,6 @@
 			}
 		},
 		methods: {
-//			getData(){
-//				this.$nextTick(()=>{
-//					this.message = this.$store.state.sockData.data.get(this.uniqueId);
-//					//console.log(this.message)
-//				})
-//			},
 			sendMessage(){
 				 if(this.msg != ''){
 				 	 let stompClient = this.$store.state.sockData.stompClient;
@@ -77,22 +71,16 @@
 			    		this.newMsg = this.message;
 						this.emojiShow = false;
 			    		this.msg = '';
+			    		this.toBottom();
 			    	
 			    }
 			},
 			saveHistory(){
-				//保存历史消息
-//				if(localStorage.getItem(this.uid)){
-//					let uidArr = [];
-//					uidArr = this.message;
-//					localStorage.setItem(this.uid,JSON.stringify(uidArr))
-//				}else{
-//					localStorage.setItem(this.uid,JSON.stringify(this.message))
-//				}
+				//保存历史
 			},
 			toBottom(){
-				var el = this.$refs.online;
 				setTimeout(()=>{
+					var el = this.$refs.online;
 					el.scrollTop = el.scrollHeight;
 				},80)
 			},
@@ -126,7 +114,7 @@
 		created(){	
 			this.uniqueId = Number(this.$store.state.uid) + Number(this.state_uid);
 			this.newMsg = this.message;
-//			
+			this.toBottom();
 			this.showEmoji(0)
 			this.emoji = emoji.default.emoji;
 		}

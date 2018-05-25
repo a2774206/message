@@ -14,7 +14,8 @@ let apiUrl = {
 	applyAdd:domain + '/api/friend/add/apply',           //添加好友
 	friendList:domain + '/api/friend/list', 	        //好友列表
 	updateNick:domain + '/api/user/nickname/update',   //修改昵称
-	updataPwd:domain + '/api/user/password/update'	  //修改昵称
+	updataPwd:domain + '/api/user/password/update',	  //修改昵称
+	exit:domain + '/api/login/out'
 	
 }
 export default apiUrl;
