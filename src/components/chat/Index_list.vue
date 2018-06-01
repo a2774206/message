@@ -1,33 +1,36 @@
 <template>
-	<ul class="index_list" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" 
-			infinite-scroll-distance="6">
-		<router-link v-for="(i,key) in list" to='/online'  tag='li' :key='key' class='friend-li' @click="delContact">
+	<div>
+		<!--v-infinite-scroll="loadMore" infinite-scroll-disabled="loading"-->
+		<ul class="index_list" v-if="newlyMsg.length>0"  
+				infinite-scroll-distance="6">
+			<router-link v-for="(i,key) in newlyMsg" 
+				:to='{path:"/online",query:{uid:(+i.receiver+(+i.sender)-$store.state.uid),nick:i.nick}}'tag='li' :key='key' class='friend-li' @click="delContact">
+				<mt-cell-swipe  
+	            :right="[  
+	                {  
+	                    content: '删除',  
+	                    style: { background: '#ff7900', color: '#fff'},  
+	                    handler: () =>delContact()
+	                }  
+	            ]">  
+	           <div class="my_tx">
+					<img src="../../../static/image/tx.png">
+				</div>
+				<div class="describe">
+					<h3><span>{{i.nick}}</span><div class="time">{{i.time}}</div></h3>
+					<p>{{i.sender}}:{{i.content}}</p>
+					<mt-badge type="error" size="small" class="badges">1</mt-badge>
+				</div>
+				
+	        </mt-cell-swipe>  
+			</router-link>
 			
-			<mt-cell-swipe  
-            :right="[  
-                {  
-                    content: '删除',  
-                    style: { background: '#ff7900', color: '#fff'},  
-                    handler: () =>delContact()
-                }  
-            ]">  
-           <div class="my_tx">
-				<img src="../../../static/image/tx.png">
-			</div>
-			<div class="describe">
-				<h3><span>李鹏鹏</span><div class="time">10:20</div></h3>
-				<p>春蕾计划，帮助老弱病残，欢迎您加入慈善事业..</p>
-				<mt-badge type="error" size="small" class="badges">10</mt-badge>
-			</div>
-			
-        </mt-cell-swipe>  
-		</router-link>
-		
-		 <center class="more_loading" v-show="true">
-	  		<mt-spinner type="triple-bounce" color="#00ccff" :size="20" v-show="true"></mt-spinner>
-	  		<span v-show="allLoaded()">扯到底了</span>
- 		</center>
-	</ul>
+			<!--<span v-show="allLoaded()">扯到底了</span>-->
+		</ul>
+		<div v-else>
+			<center class="nopeople">空空如也~</center>
+		</div>
+	</div>
 </template>
 
 <script>
@@ -39,7 +42,7 @@
 		data() {
 			return {
 				msg: 'index_list',
-				list:[1,1,1,2,5,5,5],
+				list:[],
 				loading:false
 			}
 		},
@@ -58,8 +61,44 @@
 				return false;
 			},
 			delContact(){
-				alert(1)
+				console.log()
 			}
+		},
+		computed:{
+			newlyMsg(){
+				var arr = this.$store.state.sockData.setData;
+				return arr;
+//				var newArr = [],newBrr = [];
+//				this.$store.state.sockData.data.forEach((item)=>{
+//					newArr.push(item);
+//				})
+//				for ( var i = 0; i < newArr.length;i++){
+//					for(var j = 0;j < newArr[i].length; j++){
+//						let len = newArr[i].length-1;
+//						newBrr.push(newArr[i][len]);
+//						console.log(newBrr)
+//					}
+//				}
+//				var narr = {},barr=[];
+				
+//				for(var j = 0 ; j<newBrr.length;j++){
+//					console.log(narr[newBrr[j]])
+//					if(!narr[newBrr[j]]){
+//						narr[newBrr[j]] = true;
+//						barr.push(newBrr[j]);
+//					}
+//					//在login中处理下map数据
+//					barr.push(newBrr[j]);
+//				}
+//				console.log(barr)
+//				return barr;
+			
+			}
+		},
+		created(){
+			//console.log(this.$store.state.sockData.data)
+			this.list = this.newlyMsg;
+			
 		}
 	}
 </script>
@@ -147,5 +186,9 @@
 		font-size: 12px;
 		color: #D9D9D9;
 	}
-	
+	.nopeople{
+		margin-top: 220px;
+		font-size: 14px;
+		color: #C8C8CD;
+	}
 </style>

@@ -13,7 +13,8 @@ export default new vuex.Store({
 		sockData:{
 			socket:'',
 			stompClient:'',
-			data: new Map()
+			data: new Map(),
+			setData: []
 		}
 	}
 })

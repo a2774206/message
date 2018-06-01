@@ -75,7 +75,9 @@
 					registermm:'',
 					yanzheng:''
 					
-				}
+				},
+				index:0,
+				nick:''
 			}
 		},
 		methods: {
@@ -107,6 +109,7 @@
 						this.ModalStatus(res.data.message);
 						if(res.data.status=='success'){
 							this.status = '登录成功';
+							this.getNick();
 							this.$store.state.LoginStatus = true;
 							this.$store.state.nickname = res.data.data.nickName;
 							this.$store.state.uid = res.data.data.code;
@@ -199,18 +202,97 @@
 				});	
 				
 			},
+			getNick(){
+				this.axios({
+						method: 'post',
+						url: this.urlApi.friendList
+				}).then(res => {
+					
+					this.nick = res.data.data;
+					
+				});	
+				
+			},
+			getname(uid){
+				let arr = this.nick;
+				let n ='';
+					arr.forEach((item,i)=>{
+						console.log(uid+'===='+item.code)
+						if(uid == item.code){
+							//console.log(item.nickName)
+							if(item.aliasName!=''&& item.aliasName!=null){
+								n = item.aliasName;
+							}else{
+								n = item.nickName;
+							}
+							return n;
+						}
+						
+					})
+					return n;
+			},
+			update(record,arr) {
+			/* 发送人和接收人都显示
+				var index = 0;
+			  for(let rec of arr) {  
+				if(rec.receiver == record.receiver||rec.sender == record.sender) {  
+				  arr.splice(index, 1);
+			    }
+			   index++;
+			  }
+			
+			  arr.push(record);
+			  */
+			 /**/
+				
+				
+				var index = 0;
+				let nm =this.$store.state.uid;
+				//alert(nm)
+			    for(let rec of arr) { 
+			    	if(nm==rec.receiver){
+			    		//alert(1)
+			    		record['nick'] = this.getname(rec.sender);
+			    		
+			    	}else{
+			    		record['nick'] = this.getname(rec.receiver);
+			    		
+			    	}
+//			    	alert(record['nick'])
+					if((+rec.receiver)+(+rec.sender) == (+record.receiver)+(+record.sender)) {  
+					  arr.splice(index, 1);
+				    }
+			  	 	index++;
+			 	 }
+				
+			  arr.push(record);
+			  console.log(arr)
+			},
 			socketInit(){
 		     	let socket,stompClient;
 		     	socket = this.$store.state.sockData.stompClient = new SockJS(this.urlApi.sockServer);
 				stompClient = this.$store.state.sockData.stompClient = Stomp.over(socket);
 				const mapData = this.$store.state.sockData.data;
+				//let setData = this.$store.state.sockData.setData;
 				stompClient.connect({}, frame => {
 					stompClient.subscribe(this.urlApi.boxMessage, data => {
 						let str = JSON.parse(data.body).data;
 						let M =(+str.receiver)+(+str.sender)
 						mapData.has(M) ? mapData.get(M).push(str) : mapData.set(M, [str])
-						console.log(mapData)
-				});
+						//setData.has(str) ? setData.delete(str).add(str) : setData.add(str)
+						
+						/* 这个方法无法删除旧对象数组，后续了解
+						setData.push(str);
+						let obj = {};
+						setData = setData.reduce((cur,next) => {
+							console.log(obj[next.receiver])
+						    obj[next.receiver] ? (cur[next.receiver] = next.receiver) : obj[next.receiver] = true && cur.push(next);
+						    return cur;
+						},[]) //设置cur默认类型为数组，并且初始值为空的数组
+						*/
+						this.update(str,this.$store.state.sockData.setData)
+//						this.$store.state.sockData.setData = ;
+					});
 					//告诉服务器我上线了
 					stompClient.send(this.urlApi.notice, {}, JSON.stringify({}));
 

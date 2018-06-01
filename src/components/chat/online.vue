@@ -68,31 +68,37 @@
 			            'receiver':this.$route.query.uid,
 			            'content':this.msg
 			    		}));
-			    		this.newMsg = this.message;
+//			    		this.newMsg = this.message;
 						this.emojiShow = false;
 			    		this.msg = '';
 			    		this.toBottom();
 			    	
 			    }
 			},
+			localSave(uid,val){
+				localStorage.setItem(uid,JSON.stringify(val))
+			},
 			saveHistory(){
-				//保存历史
+				/*history*/
 			},
 			toBottom(){
+				/*发言后滚动条置底*/
 				setTimeout(()=>{
 					var el = this.$refs.online;
 					el.scrollTop = el.scrollHeight;
 				},80)
 			},
 			addEmoji(i){
+				/*表情替换/emoji*/
 				this.msg  = this.msg.replace(/\/emoji/,i);
 				this.emojiShow = false;
 			},
 			showEmoji(size){
+				/*显示表情*/
 				this.emoji = emoji.default.emoji;
-				if(this.msg.length>=size){
-					this.emojiShow = (this.msg.slice(-size)=='/emoji') ? true : false;
-				}else{
+				if (this.msg.length>=size) {
+					this.emojiShow = this.msg.slice(-size) == '/emoji' ? true : false;
+				} else {
 					this.emojiShow = false;
 				}
 			}

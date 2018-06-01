@@ -72,7 +72,7 @@
 					this.show.push(word);
 				})  
 				
-				return map
+				return map;
 			}
 		}
 	}

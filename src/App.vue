@@ -58,6 +58,16 @@
 		     	}
 		     }
 		},
+		mounted(){
+			
+			window.onerror=function(){
+				//alert(1)
+			}
+			//window.addEventListener('error',function(){alert(1)},false)
+			if(window.event && window.event.errorCharacter){
+				alert()
+			}
+		},
 		created(){
 			if(!this.$store.state.LoginStatus){
 				this.$router.push('/login');
@@ -68,10 +78,12 @@
 			//去返回键
 			this.show = false;
 			this.router = this.$route.path;
+			
 		}
 	}
 </script>
-
+	
+   		
 <style>
 	#app {
 		font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -221,6 +233,9 @@
 	  opacity: 0;
 	  transform: translate3d(-100%, 0, 0);
 	}
-
+	.userList .mint-indexlist-navitem{
+		display: block;
+		overflow: hidden;
+	}
 	
 </style>
