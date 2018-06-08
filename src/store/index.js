@@ -15,6 +15,7 @@ export default new vuex.Store({
 			stompClient:'',
 			data: new Map(),
 			setData: []
-		}
+		},
+		notice:''
 	}
 })

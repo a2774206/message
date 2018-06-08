@@ -37,12 +37,24 @@
 				//监听路由发生变化，然后传值到head组件
 				//也可以在head中监听，这里可以简化，不用父子传值
 				this.router = to.path;
+				
 				this.show = (to.path == '/index'||to.query == 0||to.path == '/') ? false :true;
+				
 				this.$store.state.nicknameShow = (to.path == '/online') ? true :false;
 			
 				//路由动画
 				this.transitionName = to.meta.index > from.meta.index ? 'slide-left' : 'slide-right';
-			}
+			},
+			'notice': {
+				/*监听vuex数据，先computed记录一下值，然后再监听*/
+		　　　　handler(newValue, oldValue) {
+		　　　　　　switch(newValue.type){
+						case 'UNREAD_MESSAGE':
+						break;
+					}
+		　　　　},
+		　　　　deep: true
+		　　}
 		},
 		methods:{
 			 friend(){
@@ -56,17 +68,17 @@
 						this.$router.push('/login');
 					}
 		     	}
+		     	/*暂时先不处理网络中断
+		     	this.axios({
+		     		method:'post',
+		     		url:'/api/login/status'
+		     	}).then((res)=>{
+		     		if(res.data.status != 'success'){
+		     			this.$router.push('/login');
+		     		}
+		     	})*/
 		     }
-		},
-		mounted(){
-			
-			window.onerror=function(){
-				//alert(1)
-			}
-			//window.addEventListener('error',function(){alert(1)},false)
-			if(window.event && window.event.errorCharacter){
-				alert()
-			}
+		     
 		},
 		created(){
 			if(!this.$store.state.LoginStatus){
@@ -79,6 +91,12 @@
 			this.show = false;
 			this.router = this.$route.path;
 			
+		},
+		computed:{
+			notice(){
+				//通知,及类型
+				return this.$store.state.notice;
+			}
 		}
 	}
 </script>

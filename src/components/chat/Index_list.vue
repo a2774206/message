@@ -10,16 +10,16 @@
 	                {  
 	                    content: '删除',  
 	                    style: { background: '#ff7900', color: '#fff'},  
-	                    handler: () =>delContact()
+	                    handler: () =>delContact(key)
 	                }  
 	            ]">  
 	           <div class="my_tx">
 					<img src="../../../static/image/tx.png">
 				</div>
 				<div class="describe">
-					<h3><span>{{i.nick}}</span><div class="time">{{i.time}}</div></h3>
-					<p>{{i.sender}}:{{i.content}}</p>
-					<mt-badge type="error" size="small" class="badges">1</mt-badge>
+					<h3><span>{{i.nick}}</span><div class="time">{{i.createTime|filterTime}}</div></h3>
+					<p>{{i.content}}</p>
+					<mt-badge type="error" size="small" class="badges" v-show="!i.status">1</mt-badge>
 				</div>
 				
 	        </mt-cell-swipe>  
@@ -60,8 +60,9 @@
 			allLoaded(){
 				return false;
 			},
-			delContact(){
-				console.log()
+			delContact(key){
+				/*删除聊天*/
+				this.$store.state.sockData.setData.splice(key,1);
 			}
 		},
 		computed:{
@@ -168,9 +169,12 @@
 	.my_tx {
 		float: left;
 	}
-	.my_tx img {
+	.my_tx img{
 		width: 100%;
 		height: 100%;
+	}
+	.my_tx_false img {
+		
 		-webkit-filter: grayscale(100%);
 	    -moz-filter: grayscale(100%);
 	    -ms-filter: grayscale(100%);

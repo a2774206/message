@@ -51,13 +51,13 @@
 		name: 'online',
 		data() {
 			return {
-				msg:'',
-				stompClient:'',
-				newMsg:[],
-				uid:'',
-				emoji:'',
-				emojiShow:false,
-				uniqueId:''
+				msg:'',           /*消息框*/
+				stompClient:'',	/*stomp进程*/
+				newMsg:[],		/*vuex收到的消息集合 */
+				uid:'',			/*个人uid*/
+				emoji:'',		/*表情*/
+				emojiShow:false,/*表情显示状态*/
+				uniqueId:''		/*双方标识符*/
 			}
 		},
 		methods: {
@@ -68,7 +68,7 @@
 			            'receiver':this.$route.query.uid,
 			            'content':this.msg
 			    		}));
-//			    		this.newMsg = this.message;
+
 						this.emojiShow = false;
 			    		this.msg = '';
 			    		this.toBottom();
@@ -91,16 +91,23 @@
 			addEmoji(i){
 				/*表情替换/emoji*/
 				this.msg  = this.msg.replace(/\/emoji/,i);
+				
 				this.emojiShow = false;
 			},
 			showEmoji(size){
 				/*显示表情*/
 				this.emoji = emoji.default.emoji;
 				if (this.msg.length>=size) {
+					
 					this.emojiShow = this.msg.slice(-size) == '/emoji' ? true : false;
+					
 				} else {
 					this.emojiShow = false;
 				}
+			},
+			readfile(){
+				stompClient.send("/app/websocket/client/notify/handle", {}, 
+				JSON.stringify({type:'MESSAGE_CONFIRM',data:[]}));
 			}
 		},
 		beforeDestroy(){

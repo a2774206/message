@@ -1,6 +1,7 @@
 //全局过滤器
 //跨域切换地址http://39.104.169.117
 const domain = '';
+
 let apiUrl = {
 	sockServer:domain + '/gs-guide-websocket',					 //连接socket服务
 	yzmSrc:domain + '/api/login/verifyCode?width=80&height=30', //验证码

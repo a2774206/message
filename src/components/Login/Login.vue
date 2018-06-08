@@ -180,7 +180,7 @@
 				//注册密码三层加密
 				
 				let _register = {
-					 "email": this.RegisterData.email,
+					  "email": this.RegisterData.email,
 					  "nickName": this.RegisterData.nickName,
 					  "password": this.encrypts(this.RegisterData.registermm),
 					  "verifyCode": this.RegisterData.yanzheng
@@ -217,7 +217,7 @@
 				let arr = this.nick;
 				let n ='';
 					arr.forEach((item,i)=>{
-						console.log(uid+'===='+item.code)
+						//console.log(uid+'===='+item.code)
 						if(uid == item.code){
 							//console.log(item.nickName)
 							if(item.aliasName!=''&& item.aliasName!=null){
@@ -232,41 +232,22 @@
 					return n;
 			},
 			update(record,arr) {
-			/* 发送人和接收人都显示
-				var index = 0;
-			  for(let rec of arr) {  
-				if(rec.receiver == record.receiver||rec.sender == record.sender) {  
-				  arr.splice(index, 1);
-			    }
-			   index++;
-			  }
-			
-			  arr.push(record);
-			  */
-			 /**/
-				
-				
-				var index = 0;
+			/* 发送人和接收人都显示*/
+//				var index = 0;
 				let nm =this.$store.state.uid;
-				//alert(nm)
-			    for(let rec of arr) { 
-			    	if(nm==rec.receiver){
-			    		//alert(1)
-			    		record['nick'] = this.getname(rec.sender);
-			    		
-			    	}else{
-			    		record['nick'] = this.getname(rec.receiver);
-			    		
-			    	}
-//			    	alert(record['nick'])
-					if((+rec.receiver)+(+rec.sender) == (+record.receiver)+(+record.sender)) {  
+				
+				record['nick'] = (nm==record.receiver) ? this.getname(record.sender) : this.getname(record.receiver);
+		    	
+			    for(let index = 0;index < arr.length;index++) { 
+			    	
+			    	if((+arr[index].receiver)+(+arr[index].sender) == (+record.receiver)+(+record.sender)) {
 					  arr.splice(index, 1);
 				    }
-			  	 	index++;
+
 			 	 }
 				
-			  arr.push(record);
-			  console.log(arr)
+			  arr.unshift(record);
+			 // console.log(arr)
 			},
 			socketInit(){
 		     	let socket,stompClient;
@@ -280,7 +261,7 @@
 						let M =(+str.receiver)+(+str.sender)
 						mapData.has(M) ? mapData.get(M).push(str) : mapData.set(M, [str])
 						//setData.has(str) ? setData.delete(str).add(str) : setData.add(str)
-						
+//						this.ModalStatus('收到一条好友消息');
 						/* 这个方法无法删除旧对象数组，后续了解
 						setData.push(str);
 						let obj = {};
@@ -291,10 +272,12 @@
 						},[]) //设置cur默认类型为数组，并且初始值为空的数组
 						*/
 						this.update(str,this.$store.state.sockData.setData)
-//						this.$store.state.sockData.setData = ;
+						/*通知app组件提示*/
+						this.$store.state.notice = JSON.parse(data.body);
+						
 					});
-					//告诉服务器我上线了
-					stompClient.send(this.urlApi.notice, {}, JSON.stringify({}));
+					//通知服务器我上线了
+					stompClient.send(this.urlApi.notice, {}, JSON.stringify({type:'WEB_SOCKET_CONNECT'}));
 
 				});
 		     }

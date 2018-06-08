@@ -45,11 +45,9 @@
 					{
 						name:'退出账号',method:()=>{
 							this.axios({
-								method:'get',
+								method:'post',
 								url:this.urlApi.exit
 							}).then(res =>{
-								
-							}).catch(res =>{
 								Toast('已退出');
 								let stompClient = this.$store.state.sockData.stompClient;
 								stompClient.disconnect();
@@ -57,6 +55,11 @@
 								setTimeout(()=>{
 									this.$router.push('/login');
 								},1220)
+							}).catch(res =>{
+								Toast('发生了一个错误');
+								setTimeout(()=>{
+									window.location.reload()
+								},2000)
 							})
 						}
 					}
