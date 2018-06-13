@@ -1,6 +1,10 @@
 <template>
 	<div id="app">
 		<heading :child='router' :isShow='show'></heading>
+		<transition name="slide1-right" >   
+	     	<MessageModel v-show="noticeTop.show" :info="noticeTop"></MessageModel>
+	    </transition>
+		
 		<div class="clex"></div>
 		<transition :name="transitionName">   
 	      <router-view></router-view>
@@ -16,6 +20,7 @@
 	import heading from './components/public/head'
 	import foot from './components/public/foot'
 	import login from './components/Login/Login'
+	import MessageModel from './components/chat/MessageModel'
 	export default {
 		name: 'App',
 		data(){
@@ -23,12 +28,19 @@
 				router:'/index',
 				show:true,
 				transitionName:'',
-				Foot:false
+				Foot:false,
+				noticeTop:{
+					show:false,
+					title:'',
+					content:'',
+					sender:''
+				}
 			}
 		},
 		components: {
 			heading,
-			foot
+			foot,
+			MessageModel
 		},
 		watch: {
 			'$route' (to, from) {
@@ -50,6 +62,8 @@
 		　　　　handler(newValue, oldValue) {
 		　　　　　　switch(newValue.type){
 						case 'UNREAD_MESSAGE':
+						//未读message
+						this.underMsg()
 						break;
 					}
 		　　　　},
@@ -77,6 +91,23 @@
 		     			this.$router.push('/login');
 		     		}
 		     	})*/
+		     },
+		     underMsg(){
+		     	let msg = this.$store.state.sockData.setData;
+		     	let uid = this.$store.state.uid;
+		     	
+		     	if(!msg[0].status&&msg[0].sender!=uid){
+		     		this.noticeTop.title = msg[0].nick;
+		     		this.noticeTop.content = msg[0].content;
+		     		this.noticeTop.sender = msg[0].sender;
+		     		this.noticeTop.show = true;
+		     	}
+		     	document.onclick=()=>{
+		     		this.noticeTop.show = false;
+		     	}
+		     	setTimeout(()=>{
+		     		this.noticeTop.show = false;
+		     	},2000)
 		     }
 		     
 		},
@@ -191,7 +222,7 @@
 		/*height: 560px !important;*/
 	}
 	.userList .mint-indexlist-navitem{
-		padding: 0.035rem 5px;
+		/*padding: 0.035rem 5px;*/
 	}
 	.index_list .mint-cell-wrapper{
 		background-image:none !important;
@@ -256,4 +287,38 @@
 		overflow: hidden;
 	}
 	
+	
+	.slide1-left-enter, .slide1-right-leave-active {
+	  opacity: 0;
+	  -webkit-transform: translate(50px, 0);
+	  transform: translate(50px, 0);
+	}
+	.slide1-left-leave-active, .slide1-right-enter {
+	  opacity: 0;
+	  -webkit-transform: translate(-50px, 0);
+	  transform: translate(-50px, 0);
+	}
+	.slide1-right-enter-active,
+	.slide1-right-leave-active,
+	.slide1-left-enter-active,
+	.slide1-left-leave-active {
+	  will-change: transform;
+	  transition:all 0.1s cubic-bezier(.17, .86, .23, .14);
+	  position: absolute;
+	}
+	.slide1-right-enter {
+	  opacity: 0;
+	  transform: translate3d(0, -100%, 0);
+	}
+	.slide1-right-leave-active {
+	  opacity: 0;
+	  transform: translate3d(0, -100%, 0);
+	}
+	.userList .mint-actionsheet .mint-actionsheet-list .mint-actionsheet-listitem{
+		font-size: 14px;
+	}
+	.userList .mint-actionsheet-list  .mint-actionsheet-button{
+		font-size: 10px;
+		
+	}
 </style>

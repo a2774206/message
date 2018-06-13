@@ -2,17 +2,22 @@
 	<div class="userList">
 		<mt-index-list>
 			<mt-index-section v-for='(word,i) in words' :index="word|toUpperCase" :key="word" v-show="isShow(word)">
-				<mt-cell :title="nick(A)" v-for="(A,i) in friendSort.get(word)" :key="i" ref="list" v-on:click.native="$router.push({path:'/online',query:{uid:A.code,nick:nick(A)}})">
+				<mt-cell :title="nick(A)" v-for="(A,i) in friendSort.get(word)" :key="i" ref="list"
+					 v-on:click.native="$router.push({path:'/online',query:{uid:A.code,nick:nick(A)}})"  v-on:mousedown.native="delSide" @mouseup.native="clearSide"
+					 v-on:touchstart.native="delSide(nick(A),A.code)" @touchend.native="clearSide">
 				</mt-cell>
 			</mt-index-section>
+			<mt-actionsheet
+			  :actions="actions"
+			  v-model="sheetVisible">
+			</mt-actionsheet>
 		</mt-index-list>
 	</div>
 </template>
 
 <script>
 	import Vue from 'Vue'
-	
-	import { IndexList, IndexSection } from 'mint-ui';
+	import { IndexList, IndexSection, Actionsheet ,MessageBox,Toast} from 'mint-ui';
 
 	export default {
 		name: 'userList',
@@ -22,7 +27,37 @@
 				friendA: [],
 				py: '',
 				words: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
-				show: []
+				show: [],
+				start:'',
+				actions:[
+					{
+						name:'修改备注',method:()=>{
+							MessageBox.prompt('修改的昵称名').then(({ value, action }) => {
+									
+									this.axios({
+											method: 'post',
+											url: this.urlApi.updataBz,
+											data:{'aliasName':value,'friendCode':this.friendN.id}
+									}).then(res => {
+										
+										if(res.data.status=='success'){
+											Toast('备注成功');
+											
+										}
+									});	
+							});
+						}
+					},{
+						name:'删除好友',method:()=>{
+							
+						}
+					}
+				],
+				sheetVisible :false,
+				friendN:{
+					name:'',
+					id:''
+				}
 			}
 		},
 		methods: {
@@ -34,6 +69,7 @@
 					withCredentials: true
 				}).then(res => {
 					if(res.data.status == "success") {
+						console.log(res.data.data)
 						this.friendA = res.data.data;
 					}
 				});
@@ -49,7 +85,21 @@
 			isShow(w) {
 				//过滤好友列表
 				return this.show.indexOf(w) != -1;
+			},
+			delSide(name,id){
+				this.start = setTimeout(()=>{
+					//长按函数
+					console.log(name,id)
+					this.sheetVisible = true;
+					this.friendN.name = name;
+					this.friendN.id = id;
+				},1000);
+			},
+			clearSide(){
+				clearTimeout(this.start);
+				return false;
 			}
+			
 		},
 		created() {
 			this.LoadFrindList();

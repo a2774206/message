@@ -7,7 +7,7 @@
 						<img src="../../../static/image/tx.png">
 					</div>
 					<div class="online-name">
-						{{item.sender}}
+						{{item.sender|name($store.state.uid,$store.state.nickname,$route.query.nick)}}
 					</div>
 					<div class="online-time">
 						{{item.createTime|filterTime}}
@@ -57,7 +57,8 @@
 				uid:'',			/*个人uid*/
 				emoji:'',		/*表情*/
 				emojiShow:false,/*表情显示状态*/
-				uniqueId:''		/*双方标识符*/
+				uniqueId:'',	/*双方标识符*/
+				nick:''
 			}
 		},
 		methods: {
@@ -108,6 +109,14 @@
 			readfile(){
 				stompClient.send("/app/websocket/client/notify/handle", {}, 
 				JSON.stringify({type:'MESSAGE_CONFIRM',data:[]}));
+			},
+			getNick(){
+				this.axios({
+						method: 'post',
+						url: this.urlApi.friendList
+				}).then(res => {
+					this.nick = res.data.data;
+				});	
 			}
 		},
 		beforeDestroy(){
@@ -125,11 +134,21 @@
 			}
 		},
 		created(){	
+//			this.getNick();
 			this.uniqueId = Number(this.$store.state.uid) + Number(this.state_uid);
 			this.newMsg = this.message;
 			this.toBottom();
 			this.showEmoji(0)
 			this.emoji = emoji.default.emoji;
+		},
+		filters:{
+			name(value,a,b,c){
+				if(value==a){
+					return b;
+				}else{
+					return c;
+				}
+			}
 		}
 	}
 </script>

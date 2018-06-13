@@ -66,6 +66,7 @@
 			}
 		},
 		computed:{
+			
 			newlyMsg(){
 				var arr = this.$store.state.sockData.setData;
 				return arr;
@@ -124,7 +125,10 @@
 		position: relative;
 		line-height: 67px;
 	}
-	
+	.index_list li.friend-li a{
+		position: absolute;
+		top: 0;
+	}
 	
 	.my_tx {
 		width: 48.5px;

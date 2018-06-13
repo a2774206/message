@@ -13,6 +13,12 @@ Vue.use(MintUI)
 import filter from '../handle/filter.js'
 //api接口地址
 import InterFace from '../handle/interface.js'
+Vue.config.errorHandler = function (err, vm, info) {
+  // handle error
+  // `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
+  // 只在 2.2.0+ 可用
+  console.log(errr,vm,info)
+}
 Vue.config.productionTip = false
 Vue.prototype.urlApi = InterFace;
 //全局过滤器注册

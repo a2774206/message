@@ -71,7 +71,7 @@
 				this.fshow = to.path == '/history'|| to.path == '/security'  ? true : false;
 				let str = to.query.tab;
 				//foot tab imgsrc切换
-				if(to.query.tab<=3){
+				if(to.query.tab<=3&&to.query.tab!='undefined'){
 						document.title = this.styleSwitch[str].title;
 						for(let j = 0; j < this.styleSwitch.length; j++) {
 							this.styleSwitch[j].url = this.styleSwitch[j].url1
@@ -85,7 +85,9 @@
 				}
 				else if(to.path=='/'){
 					this.footShow = true;
+					this.styleSwitch[3].url =this.styleSwitch[3].url1
 				}
+				
 			}
 
 		},
