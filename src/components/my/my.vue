@@ -36,6 +36,8 @@
 <script>
 	import Vue from 'Vue'
 	import { Actionsheet,Toast ,MessageBox } from 'mint-ui';
+	import { setStorage } from '../../../handle/public.js';
+	
 	export default {
 		name: 'My',
 		data() {
@@ -48,9 +50,11 @@
 								method:'post',
 								url:this.urlApi.exit
 							}).then(res =>{
+								//退出时保存历史消息
+								this.saveHistory()
 								Toast('已退出');
-								let stompClient = this.$store.state.sockData.stompClient;
-								stompClient.disconnect();
+								//关闭连接
+//								(this.$store.state.sockData.stompClient).disconnect();
 								this.$store.state.LoginStatus = false;
 								setTimeout(()=>{
 									this.$router.push('/login');
@@ -96,19 +100,14 @@
 				this.sheetVisible = true;
 				localStorage.setItem('islogin',false)
 			},
-			clearLocal(){
-				MessageBox({
-				  title: '提示',
-				  message: '确定执行此操作?',
-				  showCancelButton: true
-				});
-				MessageBox.confirm('确定执行此操作?').then(action => {
-				  Toast('清除成功');
-				  localStorage.clear();
-				});
-			},
 			setting(){
 				this.sheetVisible1 = true;
+			},
+			saveHistory(){
+				//历史记录保存
+				setStorage('msg',this.$store.state.sockData.data);
+				//聊天列表保存
+				setStorage('list',this.$store.state.sockData.setData);
 			}
 			
 		},

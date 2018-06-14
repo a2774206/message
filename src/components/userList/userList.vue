@@ -41,6 +41,7 @@
 									}).then(res => {
 										
 										if(res.data.status=='success'){
+											this.LoadFrindList();
 											Toast('备注成功');
 											
 										}

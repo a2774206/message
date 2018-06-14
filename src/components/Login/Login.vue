@@ -47,6 +47,8 @@
 <script>
 	import Vue from 'Vue'
 	import { Field, Button, Navbar, TabItem, Popup } from 'mint-ui';
+	import { getStorage } from '../../../handle/public.js';
+	
 	import SockJS from 'sockjs-client';
 	import Stomp from 'stomp-websocket';
 	
@@ -249,6 +251,17 @@
 			  arr.unshift(record);
 			 // console.log(arr)
 			},
+			readHistory(){
+				//聊天记录
+				this.$store.state.sockData.data = new Map(getStorage('msg'));
+				//聊天列表
+				if(!getStorage('list')){
+					return;
+				}
+				else{
+					this.$store.state.sockData.setData = getStorage('list');
+				}
+			},
 			socketInit(){
 		     	let socket,stompClient;
 		     	socket = this.$store.state.sockData.stompClient = new SockJS(this.urlApi.sockServer);
@@ -274,6 +287,9 @@
 						this.update(str,this.$store.state.sockData.setData)
 						/*通知app组件提示*/
 						this.$store.state.notice = JSON.parse(data.body);
+						console.log(this.$store.state.sockData.data);
+						window.sessionStorage.setItem('data',JSON.stringify(this.$store.state.sockData.data));
+						console.log(new Map(JSON.parse(window.sessionStorage.getItem('data'))))
 						
 					});
 					//通知服务器我上线了
@@ -281,6 +297,9 @@
 
 				});
 		     }
+		},
+		created(){
+			this.readHistory();
 		}
 	}
 </script>

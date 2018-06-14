@@ -32,8 +32,12 @@
 				  showCancelButton: true
 				});
 				MessageBox.confirm('确定执行此操作?').then(action => {
-				  Toast('清除成功');
+				  //聊天记录清空
 				  localStorage.clear();
+				  this.$store.state.sockData.data.clear();
+				  //列表清空
+				  this.$store.state.sockData.setData = [];
+				  Toast('清除成功');
 				});
 			}
 			

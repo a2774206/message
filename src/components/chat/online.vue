@@ -32,7 +32,7 @@
 					</li>
 				</ul>
 				<div class="online-input">
-					<input type="text" v-model="msg" @input="showEmoji(6)">
+					<input type="text" v-model="msg" @input="showEmoji(6)" ref="message">
 				</div>
 				<div style="height: 100%;">
 					<button class="mint-button mint-button--default mint-button--normal is-plain fasong" @click="sendMessage">发送</button>
@@ -135,6 +135,10 @@
 		},
 		created(){	
 //			this.getNick();
+			//光标初始化
+			this.$nextTick(function () {
+		     this.$refs.message.focus()
+	      	})
 			this.uniqueId = Number(this.$store.state.uid) + Number(this.state_uid);
 			this.newMsg = this.message;
 			this.toBottom();
