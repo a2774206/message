@@ -65,6 +65,9 @@
 						//未读message
 						this.underMsg()
 						break;
+						case 'FRIEND_APPLY':
+						alert("有好友加您为好友！（暂时弹框处理）")
+						break;
 					}
 		　　　　},
 		　　　　deep: true

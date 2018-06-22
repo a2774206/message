@@ -16,6 +16,7 @@ export default new vuex.Store({
 			data: new Map(),
 			setData: []
 		},
-		notice:''
+		notice:'',
+		addfriend:[]
 	}
 })

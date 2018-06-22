@@ -42,7 +42,7 @@
 			</mt-tab-container-item>
 			<mt-tab-container-item id="3">
 				<!--<mt-cell v-for="n in 6" :title="'选项 ' + n" />-->
-				<!--<mt-cell v-for="n in 6" :title="'张三 ' + n+'请求加您为好友'" />-->
+				<mt-cell v-for="(n,i) in addf" :title="n.applyCode + '请求加您为好友'" :key="i" v-if="!n.status" />
 				
 
 			</mt-tab-container-item>
@@ -80,7 +80,8 @@
 				FriendInfo: {
 					'name': '',
 					'uid': 10000
-				}
+				},
+				addf:[]
 			}
 		},
 		created() { // 当前实例创建完成就监听这个事件
@@ -90,6 +91,9 @@
 					this.print(value);
 				}
 			})
+			this.addf=this.$store.state.addfriend;
+			console.log(1)
+			console.log(this.addf);
 		},
 		methods: {
 			
@@ -158,6 +162,12 @@
 		beforeDestroy() {
 			//解决循环触发eventbus多触发问题（Tools_list.vue）
 			Friend.$off('newfriend')
+		},
+		computed:{
+			addfd(){
+				
+				return this.$store.state.addfriend;
+			}
 		}
 	}
 </script>

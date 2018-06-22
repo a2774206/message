@@ -270,9 +270,32 @@
 				//let setData = this.$store.state.sockData.setData;
 				stompClient.connect({}, frame => {
 					stompClient.subscribe(this.urlApi.boxMessage, data => {
-						let str = JSON.parse(data.body).data;
-						let M =(+str.receiver)+(+str.sender)
-						mapData.has(M) ? mapData.get(M).push(str) : mapData.set(M, [str])
+						let ds = JSON.parse(data.body);
+						let str,friendtz;
+						/*通知app组件提示*/
+						this.$store.state.notice = JSON.parse(data.body);
+						console.log(this.$store.state.sockData.data);
+						if(ds.type=='MESSAGE'){
+							str = ds.data;
+							let M =(+str.receiver)+(+str.sender)
+							mapData.has(M) ? mapData.get(M).push(str) : mapData.set(M, [str])
+							console.log(str);
+							this.update(str,this.$store.state.sockData.setData);
+							//保存历史
+							window.sessionStorage.setItem('data',JSON.stringify(this.$store.state.sockData.data));
+							console.log(new Map(JSON.parse(window.sessionStorage.getItem('data'))));
+						}
+						
+						if(ds.type=='FRIEND_APPLY'){
+							//添加好友
+							friendtz = ds.data;
+							this.$store.state.addfriend.push(friendtz);
+							console.log(this.$store.state.addfriend)
+//							this.urlApi.agree
+						}
+						console.log(ds)
+						
+						
 						//setData.has(str) ? setData.delete(str).add(str) : setData.add(str)
 //						this.ModalStatus('收到一条好友消息');
 						/* 这个方法无法删除旧对象数组，后续了解
@@ -284,17 +307,15 @@
 						    return cur;
 						},[]) //设置cur默认类型为数组，并且初始值为空的数组
 						*/
-						this.update(str,this.$store.state.sockData.setData)
-						/*通知app组件提示*/
-						this.$store.state.notice = JSON.parse(data.body);
-						console.log(this.$store.state.sockData.data);
-						window.sessionStorage.setItem('data',JSON.stringify(this.$store.state.sockData.data));
-						console.log(new Map(JSON.parse(window.sessionStorage.getItem('data'))))
 						
 					});
 					//通知服务器我上线了
+					
 					stompClient.send(this.urlApi.notice, {}, JSON.stringify({type:'WEB_SOCKET_CONNECT'}));
-
+			
+					
+					
+					
 				});
 		     }
 		},
